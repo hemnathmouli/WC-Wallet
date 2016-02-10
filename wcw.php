@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: WC Wallet
- * Plugin URI: http://hemnathmouli.github.io/WC-Wallet
+ * Plugin URI: http://hemnathmouli.github.io/WC-Wallets
  * Author: Hemnath Mouli
  * Author URI: http://hemzware.com
  * Description: Activate this plugin to make the wallet system with woocommerce products.

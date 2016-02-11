@@ -1,3 +1,8 @@
+<?php
+if(!ABSPATH){
+	exit;
+}
+?>
 <div class = "wrap">
 <h1>Wallet / Credits Logs</h1>
 <table class = "wp-list-table widefat fixed striped posts">

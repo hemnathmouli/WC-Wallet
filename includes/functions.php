@@ -49,16 +49,6 @@ function wc_w_cart_hook(){
 		$amount = get_user_meta( get_current_user_id(), 'wc_wallet', true );
 		
 		?>
-		
-		<style>
-		.Credits{
-		    float: left;
-	    	padding-left: 25px;
-	    }
-	    .credits-text{
-	    	padding-left: 25px;
-	    }
-		</style>
 		<div class = "Credits">
 			<input type = "number" class = "input-text" id = "coupon_code" name = "wc_w_field" placeholder = "Use Credits" value = "<?php echo $on_hold; ?>" min = "0" max = "<?php echo $amount; ?>">
 			<input type="submit" class="button" name="add_credits" value="Add / Update Credits"><span class = "credits-text">Your Credits left is <b><?php echo wc_price( $amount ); ?></b> <?php if( $on_hold != "" ){ echo "- ".wc_price($on_hold)." = <b>".wc_price($amount-$on_hold)."<b>"; }?></span>
@@ -67,12 +57,6 @@ function wc_w_cart_hook(){
 		
 	<?php 
 	}else{
-		echo '<style>
-		.Credits{
-			float: left;
-			padding-left: 25px;
-		}
-		</style>';
 		echo '<div class = "Credits">';
 		echo '<span>If you have credits, please login to addit.</span>';
 		echo '</div>';
@@ -116,7 +100,7 @@ function wc_w_on_update(){
 	if ( is_checkout() || is_cart() || defined('WOOCOMMERCE_CHECKOUT') || defined('WOOCOMMERCE_CART') ) {
 		if( is_user_logged_in() ){
 			$amount = get_user_meta( get_current_user_id(), 'wc_wallet', true );
-			if(isset($_POST['wc_w_field']) && $_POST['wc_w_field'] !== null){
+			if(isset($_POST['wc_w_field']) && $_POST['wc_w_field'] !== null && $_POST['wc_w_field'] != ""){
 				$credit 	= $_POST['wc_w_field'];
 				$on_hold = get_user_meta( get_current_user_id(), 'onhold_credits',true ) != 0 ? get_user_meta( get_current_user_id(), 'onhold_credits',true ) : 0;
 				$cart_total = bindec($_POST['Wc_total']);

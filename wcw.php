@@ -56,7 +56,6 @@ class wc_w{
 	function wc_w_add_menus(){
 		add_menu_page('Wallet', 'WC Wallet', 'administrator', 'wallet', array( wc_w, 'wc_w_menu_content' ), 'dashicons-nametag', '56' );
 		add_submenu_page('wallet', 'Wallet / Credits logs', 'Wallet / Credits logs', 'administrator', 'wallet', array( wc_w, 'wc_w_menu_content' ));
-		add_submenu_page('wallet', 'Settings', 'Settings', 'administrator', 'wc_w_settings', array( wc_w, 'wc_w_menu_content' ));
 	}
 	
 	function wc_w_menu_content(){

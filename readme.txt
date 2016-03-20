@@ -1,4 +1,4 @@
-=== WC Fields Factory ===
+=== WC Wallet ===
 Contributors: hemnathmouli
 Tags: wc wallet, wc credits, woocommerce wallet, cancelled order to wallet, woocommerce credits 
 Requires at least: 3.5

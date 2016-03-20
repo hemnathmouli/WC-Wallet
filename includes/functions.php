@@ -9,7 +9,7 @@ add_action( 'edit_user_profile', 'wc_w_wallet_money' );
 function wc_w_wallet_money( $user ) {
 	?>
   <h3><?php _e("WooCommerce Wallet", "blank"); ?></h3>
-  <table class="form-table">
+  <table class="form-table"> 
     <tr>
       <th><label for="wc_wallet"><?php _e("WC Wallet"); ?></label></th>
       <td>

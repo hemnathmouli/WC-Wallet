@@ -4,10 +4,11 @@
  * Plugin URI: http://hemnathmouli.github.io/WC-Wallet
  * Author: Hemnath Mouli
  * Author URI: http://hemzware.com
- * Description: Activate this plugin to make the wallet system with woocommerce products.!
+ * Description: Activate this plugin to make the wallet system with woocommerce.!
  * Version: 1.0
  */
 
+if ( ! defined( 'WPINC' ) ) { die; }
 class wc_w{
 	
 	/**
@@ -55,7 +56,6 @@ class wc_w{
 	 */
 	function wc_w_add_menus(){
 		add_menu_page('Wallet', 'WC Wallet', 'administrator', 'wallet', array( wc_w, 'wc_w_menu_content' ), 'dashicons-nametag', '56' );
-		add_submenu_page('wallet', 'Wallet / Credits logs', 'Wallet / Credits logs', 'administrator', 'wallet', array( wc_w, 'wc_w_menu_content' ));
 	}
 	
 	function wc_w_menu_content(){
@@ -114,5 +114,14 @@ class wc_w{
 	
 }
 
-new wc_w();
+if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+	new wc_w();
+} else {
+	add_action( 'admin_notices', 'wc_wallet_notice' );
+}
+
+function wc_wallet_notice() {
+	echo '<div class="error"><p><strong> <i> WC Wallet </i> </strong> Requires <a href="'.admin_url( 'plugin-install.php?tab=plugin-information&plugin=woocommerce').'"> <strong> <u>Woocommerce</u></strong>  </a> To Be Installed And Activated </p></div>';
+}
+
 ?>

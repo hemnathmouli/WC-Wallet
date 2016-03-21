@@ -99,7 +99,7 @@ function woo_add_cart_fee( $carts ) {
 	global $woocommerce; 
 	if( is_user_logged_in() ){
 		if( get_user_meta( get_current_user_id(), 'onhold_credits',true ) !== null && get_user_meta( get_current_user_id(), 'onhold_credits',true ) != 0 ){
-			WC()->cart->add_fee( 'Credits :', -get_user_meta( get_current_user_id(), 'onhold_credits',true ), false, '' );
+			WC()->cart->add_fee( 'Credits', -get_user_meta( get_current_user_id(), 'onhold_credits',true ), false, '' );
 		}
 	}
 	
@@ -115,8 +115,18 @@ function wc_w_cart_hook(){
 		$amount = get_user_meta( get_current_user_id(), 'wc_wallet', true );
 		
 		?>
+		<style>
+			.Credits{
+				width: 100%;
+    			text-align: left;
+    			margin-top: 10px;
+			}
+			.credits-text{
+				float: right;
+			}
+		</style>
 		<div class = "Credits">
-			<input type = "number" class = "input-text" id = "coupon_code" name = "wc_w_field" placeholder = "Use Credits" value = "<?php echo $on_hold; ?>" min = "0" max = "<?php echo $amount; ?>">
+			<input type = "number" class = "input-text credits_amount" id = "coupon_code" name = "wc_w_field" placeholder = "Use Credits" value = "<?php echo $on_hold; ?>" min = "0" max = "<?php echo $amount; ?>">
 			<input type="submit" class="button" name="add_credits" value="Add / Update Credits"><span class = "credits-text">Your Credits left is <b><?php echo wc_price( $amount ); ?></b> <?php if( $on_hold != "" ){ echo "- ".wc_price($on_hold)." = <b>".wc_price($amount-$on_hold)."<b>"; }?></span>
 		</div>
 		
@@ -148,11 +158,11 @@ function wc_w_action_after_checkout( $order_id ){
 			update_user_meta( $uid, 'wc_wallet', $credit-$onhold );
 		}
 	}
-	wc_w_add_to_log($uid, $onhold, 0, $order_id);
+	wc_w_add_to_log( $uid, $onhold, 0, $order_id );
 }
 
 add_action('wp_head', 'wc_m_after_calculate_totals');
-
+add_action( 'rf_get_the_cart', 'wc_m_after_calculate_totals' );
 
 function wc_m_after_calculate_totals(){
 	if ( WC()->cart->get_cart_contents_count() == 0 ) {
@@ -185,6 +195,7 @@ function wc_w_add_to_log( $uid, $amount, $method, $order_id ){
 	$wpdb->insert( 
 		$e->db_name, 
 		array( 
+				'storage_type' => 'log',
 				'wcw_type' => $method, 
 				'uid' => $uid, 
 				'date'	=> date('d M Y'), 
@@ -192,6 +203,7 @@ function wc_w_add_to_log( $uid, $amount, $method, $order_id ){
 				'amount' => $amount
 		), 
 		array( 
+				'%d',
 				'%d',
 				'%d',
 				'%s',
@@ -224,7 +236,7 @@ function wc_w_get_log(){
 	$e	 = new wc_w();
 	$items = array();
 	$con = mysqli_connect( DB_HOST, DB_USER, DB_PASSWORD, DB_NAME );
-	$sql = "select * from ".$e->db_name;
+	$sql = "select * from ".$e->db_name." WHERE storage_type = 'log' ";
 	$result	=	mysqli_query( $con, $sql );
 	$i = 0;
 	while($row = mysqli_fetch_assoc($result)){
@@ -359,6 +371,115 @@ function this_get_tax( $_this ){
 		$tax = array_map( array( 'WC_Tax', 'round' ), $tax);
 	}
 	return array_sum($tax);
+}
+
+/**
+ * 
+ * @return boolean
+ */
+function is_cancel_request_enabled(){
+	$e = get_option( 'wcw_cancel_req' );
+	if( $e == 1 ){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+function wcw_plugin_success_msg( $msg, $status = "success" ){
+	if( $status == "success" ){
+		echo '<div id="setting-error-settings_updated" class="updated settings-error notice is-dismissible"> 
+			<p><strong>'.$msg.'</strong></p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>';
+	}else{
+		echo '<div class="error"><p>'.$msg.'</p></div>';
+	}
+}
+
+function wcw_update_form( $post ){
+	if( isset( $post['wcw_payment_method'] ) ){
+		$str = implode( ",", $post['wcw_payment_method'] );
+		update_option('wcw_payment_method', $str);
+	}else{
+		update_option('wcw_payment_method', '');
+	}
+	
+	if( isset( $post['wcw_apply_tax'] ) ){
+		update_option('wcw_apply_tax', $post['wcw_apply_tax']);
+	}
+		
+	wcw_yes_or_no_update($post, 'wcw_restrict_max');
+	wcw_yes_or_no_update($post, 'wcw_notify_admin');
+	wcw_yes_or_no_update($post, 'wcw_remining_credits');
+	wcw_yes_or_no_update($post, 'wcw_cancel_req');
+	wcw_yes_or_no_update($post, 'wcw_automatic_cancel_req');
+	wcw_yes_or_no_update($post, 'wcw_notify_on_cancel_req');
+	
+	return true;
+}
+
+function wcw_yes_or_no_update( $post, $str ){
+	if( isset( $post[$str] ) ){
+		update_option($str, $post[$str]);
+	}else{
+		update_option($str, '');
+	}
+}
+
+/* Cancel Order Starts from Here */
+if( is_cancel_request_enabled() ){
+	add_filter('woocommerce_my_account_my_orders_actions', 'add_wc_cancel_my_account_orders_status', 100, 2);
+	function add_wc_cancel_my_account_orders_status( $actions, $order )    {
+	
+		if ($order->id) {
+			$the_order = wc_get_order($order->id);
+		}
+	
+	
+		if ($the_order->has_status(array('on-hold', 'pending', 'processing'))) {
+			$actions['cancelled'] = array('url' => wp_nonce_url(admin_url('admin-ajax.php?action=mark_order_as_cancell_request&order_id=' . $order->id), 'wc_wallet_cancel_order_request'), 'name' => 'Send Cancel Request', 'action' => "cancel-request");
+		}
+	
+		return $actions;
+	}
+	
+	add_action('wp_ajax_mark_order_as_cancell_request', 'mark_order_as_cancell_request');
+	add_action('wp_ajax_nopriv_mark_order_as_cancell_request', 'mark_order_as_cancell_request');
+	function mark_order_as_cancell_request()    {
+	
+		if( is_user_logged_in() ){
+			$order_id = (int)$_GET['order_id'] ? (int)$_GET['order_id'] : 0;
+		}else{
+			home_url();
+			die();
+		}
+		
+		if( $order_id != 0 ){
+			$order = wc_get_order($order_id);
+			$order->update_status('wc-cancel-request');
+		}
+		wp_safe_redirect(wp_get_referer() ? wp_get_referer() :
+				get_permalink(get_option('woocommerce_myaccount_page_id')));
+		die();
+	}
+	
+	function wpex_wc_register_post_statuses() {
+		register_post_status( 'wc-cancel-request', array(
+				'label'                     => _x( 'On Cancel Request', 'WooCommerce Order status', 'text_domain' ),
+				'public'                    => true,
+				'exclude_from_search'       => false,
+				'show_in_admin_all_list'    => true,
+				'show_in_admin_status_list' => true,
+				'label_count'               => _n_noop( 'Approved (%s)', 'Approved (%s)', 'text_domain' )
+		) );
+	}
+	add_filter( 'init', 'wpex_wc_register_post_statuses' );
+	
+	// Add New Order Statuses to WooCommerce
+	function wpex_wc_add_order_statuses( $order_statuses ) {
+		$order_statuses['wc-cancel-request'] = _x( 'On Cancel Request', 'WooCommerce Order status', 'text_domain' );
+		return $order_statuses;
+	}
+	add_filter( 'wc_order_statuses', 'wpex_wc_add_order_statuses' );
 }
 
 

@@ -25,7 +25,7 @@ if(!ABSPATH){
 		<td><a href = '<?php echo home_url()."/wp-admin/post.php?post=".$log["oid"]."&action=edit"; ?>' title = "View Order"><?php echo "#".$log["oid"]." - View Order"; ?></a></td>
 		<td><?php wc_w_get_type( $log["wcw_type"] ); ?></td>
 		<td><?php echo wc_price( $log["amount"] );  ?></td>
-		<td><?php echo $log["date"]?></td>
+		<td><?php echo $log["date"]; ?></td>
 	<tr>
 	<?php }?>
 	<tfoot>

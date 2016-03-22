@@ -54,44 +54,108 @@ function woo_add_cart_fee( $carts ) {
 				$on_hold = get_user_meta( get_current_user_id(), 'onhold_credits',true ) != 0 ? get_user_meta( get_current_user_id(), 'onhold_credits',true ) : 0;
 				
 				$cart_total = $carts->cart_contents_total;
-				$tax = this_get_tax( $carts );
-				$cart_total = $cart_total + $tax; 
+				if( is_wallet_include_tax() ){
+					$tax = this_get_tax( $carts );
+					$cart_total = $cart_total + $tax;
+				} 
 				$in_wallet	= $amount;
-					
-				if( $credit <= $in_wallet ){
-					if( $credit <= $cart_total ){
-						if( set_credit_in_cart( $credit ) ){
-							wc_add_notice( 'Credits added sucessfully.!');
+				
+				// Check if the amount is restricted
+				if( is_wallet_restrict_max() ){
+					// Check the restriction amount with entered amount
+					if( get_wallet_restricted_amount() < $cart_total ){
+						// Add restricted amount if the amount is larger than the restriction
+						if( set_credit_in_cart( get_wallet_restricted_amount() ) ){
+							wc_add_notice( 'Credit is Restricted for the users to '.wc_price( get_wallet_restricted_amount() ).'.!');
 						}else{
 							set_credit_in_cart( 0 );
 							wc_add_notice( 'There is Error while adding credits.!', 'error' );
 						}
-					}else if( $credit > $cart_total ){
-						if( set_credit_in_cart( $cart_total ) ){
-							wc_add_notice( 'Credits adjusted with total.!');
+					}else{
+						if( $credit <= $in_wallet ){
+							if( $credit <= $cart_total ){
+								if( set_credit_in_cart( $credit ) ){
+									wc_add_notice( 'Credits added sucessfully.!');
+								}else{
+									set_credit_in_cart( 0 );
+									wc_add_notice( 'There is Error while adding credits.!', 'error' );
+								}
+							}else if( $credit > $cart_total ){
+								if( set_credit_in_cart( $cart_total ) ){
+									wc_add_notice( 'Credits adjusted with total.!');
+								}else{
+									set_credit_in_cart( 0 );
+									wc_add_notice( 'You dont\'t have sufficient credits in your account.', 'error' );
+								}
+							}
 						}else{
 							set_credit_in_cart( 0 );
 							wc_add_notice( 'You dont\'t have sufficient credits in your account.', 'error' );
 						}
 					}
 				}else{
-					set_credit_in_cart( 0 );
-					wc_add_notice( 'You dont\'t have sufficient credits in your account.', 'error' );
+					if( $credit <= $in_wallet ){
+						if( $credit <= $cart_total ){
+							if( set_credit_in_cart( $credit ) ){
+								wc_add_notice( 'Credits added sucessfully.!');
+							}else{
+								set_credit_in_cart( 0 );
+								wc_add_notice( 'There is Error while adding credits.!', 'error' );
+							}
+						}else if( $credit > $cart_total ){
+							if( set_credit_in_cart( $cart_total ) ){
+								wc_add_notice( 'Credits adjusted with total.!');
+							}else{
+								set_credit_in_cart( 0 );
+								wc_add_notice( 'You dont\'t have sufficient credits in your account.', 'error' );
+							}
+						}
+					}else{
+						set_credit_in_cart( 0 );
+						wc_add_notice( 'You dont\'t have sufficient credits in your account.', 'error' );
+					}
 				}
+					
+				
 			}else{
 				$on_hold = get_user_meta( get_current_user_id(), 'onhold_credits',true ) != 0 ? get_user_meta( get_current_user_id(), 'onhold_credits',true ) : 0;
 				
 				$cart_total = $carts->cart_contents_total;
-				$tax = this_get_tax( $carts );
-				$cart_total = $cart_total + $tax;
-				if( $on_hold > $cart_total ){
-					if( $amount >= $cart_total ){
-						set_credit_in_cart( $cart_total );
-						wc_add_notice( 'Credits adjusted with total.!' );
+				if( is_wallet_include_tax() ){
+					$tax = this_get_tax( $carts );
+					$cart_total = $cart_total + $tax;
+				}
+				
+				if( is_wallet_restrict_max() ){
+					// Check the restriction amount with entered amount
+					if( get_wallet_restricted_amount() < $on_hold ){
+						if( set_credit_in_cart( get_wallet_restricted_amount() ) ){
+							wc_add_notice( 'Credit is Restricted for the users to '.wc_price( get_wallet_restricted_amount() ).'.!');
+						}else{
+							set_credit_in_cart( 0 );
+							wc_add_notice( 'There is Error while adding credits.!', 'error' );
+						}
 					}else{
-						set_credit_in_cart( 0 );
+						if( $on_hold > $cart_total ){
+							if( $amount >= $cart_total ){
+								set_credit_in_cart( $cart_total );
+								wc_add_notice( 'Credits adjusted with total.!' );
+							}else{
+								set_credit_in_cart( 0 );
+							}
+						}
+					}
+				}else{
+					if( $on_hold > $cart_total ){
+						if( $amount >= $cart_total ){
+							set_credit_in_cart( $cart_total );
+							wc_add_notice( 'Credits adjusted with total.!' );
+						}else{
+							set_credit_in_cart( 0 );
+						}
 					}
 				}
+				
 			}
 		}
 	}
@@ -127,7 +191,10 @@ function wc_w_cart_hook(){
 		</style>
 		<div class = "Credits">
 			<input type = "number" class = "input-text credits_amount" id = "coupon_code" name = "wc_w_field" placeholder = "Use Credits" value = "<?php echo $on_hold; ?>" min = "0" max = "<?php echo $amount; ?>">
-			<input type="submit" class="button" name="add_credits" value="Add / Update Credits"><span class = "credits-text">Your Credits left is <b><?php echo wc_price( $amount ); ?></b> <?php if( $on_hold != "" ){ echo "- ".wc_price($on_hold)." = <b>".wc_price($amount-$on_hold)."<b>"; }?></span>
+			<input type="submit" class="button" name="add_credits" value="Add / Update Credits">
+			<?php if( is_show_remaining_credits() ){ ?>
+				<span class = "credits-text">Your Credits left is <b><?php echo wc_price( $amount ); ?></b> <?php if( $on_hold != "" ){ echo "- ".wc_price($on_hold)." = <b>".wc_price($amount-$on_hold)."<b>"; }?></span>
+			<?php }?>
 		</div>
 		
 	<?php 
@@ -171,6 +238,8 @@ function wc_m_after_calculate_totals(){
 }
 
 
+/* =========== Insert Functions ============= */
+
 /**
  * 
  * @param int $uid
@@ -190,29 +259,52 @@ function wc_w_add_to_log( $uid, $amount, $method, $order_id ){
 		case 1: $method = 1; break;
 		default: $method = 0; break;
 	}
-	$e	 = new wc_w();
-	global $wpdb;
-	$wpdb->insert( 
-		$e->db_name, 
-		array( 
-				'storage_type' => 'log',
-				'wcw_type' => $method, 
-				'uid' => $uid, 
-				'date'	=> date('d M Y'), 
-				'oid' => $order_id,
-				'amount' => $amount
-		), 
-		array( 
-				'%d',
-				'%d',
-				'%d',
-				'%s',
-				'%d',
-				'%d'
-		) 
+	$arg=array(
+			"post_title"		=>	"",
+			"post_content"		=>	"",
+			"post_type"			=>	"wcw_logs",
+			"post_status"		=>	"publish"
 	);
+	$pid = wp_insert_post( $arg );
+	add_post_meta( $pid, 'wcw_type', $method );
+	add_post_meta( $pid, 'uid', $uid );
+	add_post_meta( $pid, 'date', date('d M Y') );
+	add_post_meta( $pid, 'oid', $order_id );
+	add_post_meta( $pid, 'amount', $amount );
 }
 
+add_action('wcw_after_changeto_cancel_order', 'action_on_cancel_order');
+
+/**
+ *
+ * @param array $array
+*/
+function action_on_cancel_order( $array ){
+	$order  = wc_get_order( $array['order_id'] );
+	$es = $order->get_fees();
+	foreach( $es as $key => $yl ){
+		if( $yl['name'] == "Credits" ){
+			$e = $key;
+			break;
+		}
+	}
+	$c = (string)$e;
+	$amount = -1*$es[$c]['line_total'] + $order->get_total();
+	$arg = array(
+			"post_title"		=>	"WC Wallet",
+			"post_content"		=>	"",
+			"post_type"			=>	"wcw_corequest",
+			"post_status"		=>	"publish"
+	);
+	$pid = wp_insert_post( $arg );
+	add_post_meta( $pid, 'uid', $array['uid'] );
+	add_post_meta( $pid, 'date', date('d M Y') );
+	add_post_meta( $pid, 'oid', $array['order_id'] );
+	add_post_meta( $pid, 'amount', $amount );
+
+}
+
+/* =========== Insert Functions Ends ============= */
 
 /**
  * 
@@ -228,28 +320,7 @@ function wc_w_get_type( $type ){
 	echo $txt;
 }
 
-/**
- * 
- * @return array
- */
-function wc_w_get_log(){
-	$e	 = new wc_w();
-	$items = array();
-	$con = mysqli_connect( DB_HOST, DB_USER, DB_PASSWORD, DB_NAME );
-	$sql = "select * from ".$e->db_name." WHERE storage_type = 'log' ";
-	$result	=	mysqli_query( $con, $sql );
-	$i = 0;
-	while($row = mysqli_fetch_assoc($result)){
-		$items[$i]['date']	=	$row['date'];
-		$items[$i]['oid']	=	$row['oid'];
-		$items[$i]['uid']	=	$row['uid'];
-		$items[$i]['amount']=	$row['amount'];
-		$items[$i]['ID']	=	$row['ID'];
-		$items[$i]['wcw_type']	=	$row['wcw_type'];
-		$i++;
-	}
-	return $items;
-}
+
 
 /**
  * 
@@ -373,6 +444,8 @@ function this_get_tax( $_this ){
 	return array_sum($tax);
 }
 
+/* All IS functions starts */
+
 /**
  * 
  * @return boolean
@@ -385,6 +458,114 @@ function is_cancel_request_enabled(){
 		return false;
 	}
 }
+
+/**
+ * 
+ * @return boolean
+ */
+function is_wallet_include_tax(){
+	$e = get_option('wcw_apply_tax');
+	if( $e == 1 ){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+/**
+ * 
+ * @return boolean
+ */
+function is_wallet_restrict_max(){
+	$e = get_option('wcw_restrict_max');
+	if( $e != "" || $e != null || $e != 0 ){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+/**
+ * 
+ * @return boolean
+ */
+function is_show_remaining_credits(){
+	$e = get_option('wcw_remining_credits');
+	if( $e == 1 ){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+/* All IS functions ends */
+
+/* Get functions */
+
+function get_wallet_restricted_amount(){
+	return (int)get_option('wcw_restrict_max');
+}
+
+/**
+ *
+ * @return array
+ */
+function wc_w_get_log(){
+	$args = array(
+			"posts_per_page"	=>	-1,
+			'post_type'        	=> 	'wcw_logs',
+			"orderby"			=>	'date'
+	);
+	$posts = get_posts( $args );
+
+	foreach( $posts as $post ){
+		$pid = $post->ID;
+
+		$items[$i]['oid']		=	get_post_meta( $pid, 'oid', true );
+		$items[$i]['uid']		=	get_post_meta( $pid, 'uid', true );
+		$items[$i]['amount'] 	=	get_post_meta( $pid, 'amount', true );
+		$items[$i]['date']		=	get_post_meta( $pid, 'date', true );
+		$items[$i]['ID']		=	$pid;
+
+	}
+
+	return $items;
+}
+
+/**
+ *
+ * @return array
+ */
+function wc_w_get_cancel_requests(){
+	$args = array(
+			"posts_per_page"	=>	-1,
+			'post_type'        	=> 	'wcw_corequest',
+			"orderby"			=>	'date'
+	);
+	$posts = get_posts( $args );
+	
+	$i = 0;
+	if( count( $posts ) != 0 ){
+		foreach( $posts as $post ){
+			$pid = $post->ID;
+	
+			$items[$i]['oid']		=	get_post_meta( $pid, 'oid', true );
+			$items[$i]['uid']		=	get_post_meta( $pid, 'uid', true );
+			$items[$i]['amount'] 	=	get_post_meta( $pid, 'amount', true );
+			$items[$i]['date']		=	get_post_meta( $pid, 'date', true );
+			$items[$i]['ID']		=	$pid;
+			$i++;
+		}
+	}
+	if( $i == 0 ){
+		return 0;
+	}else{
+		return $items;
+	}
+	
+}
+
+/* Get functions */
 
 function wcw_plugin_success_msg( $msg, $status = "success" ){
 	if( $status == "success" ){
@@ -407,16 +588,21 @@ function wcw_update_form( $post ){
 		update_option('wcw_apply_tax', $post['wcw_apply_tax']);
 	}
 		
-	wcw_yes_or_no_update($post, 'wcw_restrict_max');
-	wcw_yes_or_no_update($post, 'wcw_notify_admin');
-	wcw_yes_or_no_update($post, 'wcw_remining_credits');
-	wcw_yes_or_no_update($post, 'wcw_cancel_req');
-	wcw_yes_or_no_update($post, 'wcw_automatic_cancel_req');
-	wcw_yes_or_no_update($post, 'wcw_notify_on_cancel_req');
+	wcw_yes_or_no_update( $post, 'wcw_restrict_max' );
+	wcw_yes_or_no_update( $post, 'wcw_notify_admin' );
+	wcw_yes_or_no_update( $post, 'wcw_remining_credits' );
+	wcw_yes_or_no_update( $post, 'wcw_cancel_req' );
+	wcw_yes_or_no_update( $post, 'wcw_automatic_cancel_req' );
+	wcw_yes_or_no_update( $post, 'wcw_notify_on_cancel_req' );
 	
 	return true;
 }
 
+/**
+ * 
+ * @param array $post
+ * @param string $str
+ */
 function wcw_yes_or_no_update( $post, $str ){
 	if( isset( $post[$str] ) ){
 		update_option($str, $post[$str]);
@@ -436,14 +622,18 @@ if( is_cancel_request_enabled() ){
 	
 	
 		if ($the_order->has_status(array('on-hold', 'pending', 'processing'))) {
-			$actions['cancelled'] = array('url' => wp_nonce_url(admin_url('admin-ajax.php?action=mark_order_as_cancell_request&order_id=' . $order->id), 'wc_wallet_cancel_order_request'), 'name' => 'Send Cancel Request', 'action' => "cancel-request");
+			$actions['cancelled'] = array(
+					'url' 		=> wp_nonce_url(admin_url('admin-ajax.php?action=request_for_cancell_wcw&order_id=' . $order->id), 'mark_order_as_cancell_request'), 
+					'name' 		=> 'Send Cancel Request', 
+					'action' 	=> "mark_order_as_cancell_request"
+			);
 		}
 	
 		return $actions;
 	}
 	
-	add_action('wp_ajax_mark_order_as_cancell_request', 'mark_order_as_cancell_request');
-	add_action('wp_ajax_nopriv_mark_order_as_cancell_request', 'mark_order_as_cancell_request');
+	add_action('wp_ajax_request_for_cancell_wcw', 'mark_order_as_cancell_request');
+	add_action('wp_ajax_nopriv_request_for_cancell_wcw', 'mark_order_as_cancell_request');
 	function mark_order_as_cancell_request()    {
 	
 		if( is_user_logged_in() ){
@@ -455,28 +645,31 @@ if( is_cancel_request_enabled() ){
 		
 		if( $order_id != 0 ){
 			$order = wc_get_order($order_id);
+			do_action( 'wcw_before_changeto_cancel_order', array( 'order_id' => $order_id, 'uid' => get_current_user_id() ) );
 			$order->update_status('wc-cancel-request');
+			do_action( 'wcw_after_changeto_cancel_order', array( 'order_id' => $order_id, 'uid' => get_current_user_id() ) );
 		}
 		wp_safe_redirect(wp_get_referer() ? wp_get_referer() :
 				get_permalink(get_option('woocommerce_myaccount_page_id')));
 		die();
+		
 	}
 	
 	function wpex_wc_register_post_statuses() {
 		register_post_status( 'wc-cancel-request', array(
-				'label'                     => _x( 'On Cancel Request', 'WooCommerce Order status', 'text_domain' ),
+				'label'                     => _x( 'On Cancel Request', 'WooCommerce Order status', 'wc_wallet' ),
 				'public'                    => true,
 				'exclude_from_search'       => false,
 				'show_in_admin_all_list'    => true,
 				'show_in_admin_status_list' => true,
-				'label_count'               => _n_noop( 'Approved (%s)', 'Approved (%s)', 'text_domain' )
+				'label_count'               => _n_noop( 'On Cancel Request <span class="count">(%s)</span>', 'On Cancel Request <span class="count">(%s)</span>', 'wc_wallet' )
 		) );
 	}
 	add_filter( 'init', 'wpex_wc_register_post_statuses' );
 	
 	// Add New Order Statuses to WooCommerce
 	function wpex_wc_add_order_statuses( $order_statuses ) {
-		$order_statuses['wc-cancel-request'] = _x( 'On Cancel Request', 'WooCommerce Order status', 'text_domain' );
+		$order_statuses['wc-cancel-request'] = _x( 'On Cancel Request', 'WooCommerce Order status', 'wc_wallet' );
 		return $order_statuses;
 	}
 	add_filter( 'wc_order_statuses', 'wpex_wc_add_order_statuses' );

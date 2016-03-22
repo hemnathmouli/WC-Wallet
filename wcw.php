@@ -52,8 +52,8 @@ class wc_w{
 	 */
 	function hooks(){
 		add_action( 'admin_menu', array(__CLASS__, 'wc_w_add_menus'), 5 );
-		register_activation_hook(__FILE__, array( $this, 'wc_w_db_init') );
 		register_activation_hook(__FILE__, array( $this, 'add_options') );
+		add_action( 'init', array( $this, 'wc_w_add_post_type' ), 0 );
 		add_action( 'woocommerce_order_status_cancelled', array($this, 'wc_m_move_order_money_to_user') );
 	}
 	
@@ -82,7 +82,51 @@ class wc_w{
 		add_submenu_page( 'wallet', 'Credits logs','Credits logs', 'administrator', 'wallet', array( wc_w, 'wc_w_menu_content' ) );
 		add_submenu_page( 'wallet', 'Cancel Requests', 'Cancel Requests '.$e->request_count( 10 ), 'administrator', 'wc-wallet-cancel-requests', array( wc_w, 'wc_w_menu_cancel_request' ) );
 		add_submenu_page( 'wallet', 'Settings', 'Settings', 'administrator', 'wc-wallet-settings', array( wc_w, 'wc_w_menu_settings' ) );
-	}	
+	}
+
+	function wc_w_add_post_type(){
+		
+			$labels = array(
+					'name'                => _x( 'Cancel Order Request', 'Cancel Order', 'wcw_cancel_order_request' ),
+					'singular_name'       => _x( 'Cancel Order Request', 'Cancel Order', 'wcw_cancel_order_request' ),
+					'menu_name'           => __( 'Cancel Order', 'wcw_cancel_order_request' ),
+					'parent_item_colon'   => __( 'Parent Cancel Order', 'wcw_cancel_order_request' ),
+					'all_items'           => __( 'All Cancel Order', 'wcw_cancel_order_request' ),
+					'view_item'           => __( 'View Cancel Order', 'wcw_cancel_order_request' ),
+					'add_new_item'        => __( 'Add New Cancel Order', 'wcw_cancel_order_request' ),
+					'add_new'             => __( 'Add New', 'wcw_cancel_order_request' ),
+					'edit_item'           => __( 'Edit Cancel Order', 'wcw_cancel_order_request' ),
+					'update_item'         => __( 'Update Cancel Order', 'wcw_cancel_order_request' ),
+					'search_items'        => __( 'Search Cancel Order', 'wcw_cancel_order_request' ),
+					'not_found'           => __( 'Not Found', 'wcw_cancel_order_request' ),
+					'not_found_in_trash'  => __( 'Not found in Trash', 'wcw_cancel_order_request' ),
+			);
+		
+			// Set other options for Custom Post Type
+		
+			$args = array(
+					'label'               => __( 'Cancel Order Request', 'wcw_cancel_order_request' ),
+					'description'         => __( 'Cancel Order Request', 'wcw_cancel_order_request' ),
+					'labels'              => $labels,
+					// Features this CPT supports in Post Editor
+					'supports'            => array( 'title', 'editor' ),
+					'taxonomies'          => array( 'genres' ),
+					'hierarchical'        => false,
+					'public'              => true,
+					'show_ui'             => true,
+					'show_in_menu'        => false,
+					'show_in_nav_menus'   => true,
+					'show_in_admin_bar'   => true,
+					'can_export'          => true,
+					'has_archive'         => true,
+					'exclude_from_search' => false,
+					'publicly_queryable'  => true,
+					'capability_type'     => 'page',
+			);
+			register_post_type( 'wcw_corequest', $args );
+		
+		
+	}
 	
 	function wc_w_menu_content(){
 		$e = new wc_w();
@@ -103,23 +147,6 @@ class wc_w{
 		include_once $this->includes.'functions.php';
 	}
 	
-	function wc_w_db_init(){
-		global $wpdb;
-		$table_name = $this->db_name;
-		$sql = "CREATE TABLE $table_name (
-		`ID` int NOT NULL AUTO_INCREMENT,
-		`storage_type` varchar(100) NOT NULL,
-		`wcw_type` varchar(100) NULL,
-		`uid` int(25) NOT NULL,
-		`date` varchar(100) NULL,
-		`oid` int(25) NULL,
-		`amount` varchar(100) NULL,
-		PRIMARY KEY(ID)
-		);";
-		require_once (ABSPATH . 'wp-admin/includes/upgrade.php');
-		dbDelta($sql);
-	}
-	
 	/**
 	 * 
 	 * @param int $order_id
@@ -131,8 +158,10 @@ class wc_w{
 		$ttyl = $order->get_fees();
 		if( $order->get_status() == "processing" || $order->get_status() == "completed" ){
 			foreach( $ttyl as $key => $yl ){
-				$e = $key;
-				break;
+				if( $yl['name'] == "Credits" ){
+					$e = $key;
+					break;
+				}
 			}
 			$c = (string)$e;
 			

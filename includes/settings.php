@@ -51,6 +51,7 @@ $wcw_notify_on_cancel_req 	= get_option('wcw_notify_on_cancel_req') == 1 	? 'che
 						echo "No Payment Methods found.!";
 					}
 				?>
+				<p class="description" id="tagline-description">When order is cancelled, if the above checked method are there, the cancel request can be processed.</p>
 			</td>
 		</tr>
 		

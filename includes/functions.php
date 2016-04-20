@@ -6,6 +6,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	
 add_action( 'show_user_profile', 'wc_w_wallet_money' );
 add_action( 'edit_user_profile', 'wc_w_wallet_money' );
+
+/**
+ * 
+ * @param int $user
+ */
 function wc_w_wallet_money( $user ) {
 	?>
   <h3><?php _e("WooCommerce Wallet", "blank"); ?></h3>
@@ -56,7 +61,7 @@ function woo_add_cart_fee( $carts ) {
 				$cart_total = $carts->cart_contents_total;
 				if( is_wallet_include_tax() ){
 					$tax = this_get_tax( $carts );
-					$cart_total = $cart_total + $tax;
+					$cart_total = $cart_total + array_sum($tax);
 				} 
 				$in_wallet	= $amount;
 				
@@ -123,7 +128,7 @@ function woo_add_cart_fee( $carts ) {
 				$cart_total = $carts->cart_contents_total;
 				if( is_wallet_include_tax() ){
 					$tax = this_get_tax( $carts );
-					$cart_total = $cart_total + $tax;
+					$cart_total = $cart_total + array_sum($tax);
 				}
 				
 				if( is_wallet_restrict_max() ){
@@ -170,8 +175,13 @@ function woo_add_cart_fee( $carts ) {
 
 }
 add_action( 'woocommerce_cart_calculate_fees', 'woo_add_cart_fee' );
-
+ 
 add_action( 'woocommerce_cart_actions', 'wc_w_cart_hook' );
+
+/**
+ * 
+ * @todo Add credits input to cart 
+ */
 function wc_w_cart_hook(){
 	if( is_user_logged_in() ){
 
@@ -205,6 +215,11 @@ function wc_w_cart_hook(){
 	}
 }
 
+/**
+ * 
+ * @param int $amount
+ * @return boolean
+ */
 function set_credit_in_cart( $amount ){
 	if( update_user_meta( get_current_user_id(), 'onhold_credits', $amount ) ){
 		return true;
@@ -215,6 +230,11 @@ function set_credit_in_cart( $amount ){
 
 add_action('woocommerce_checkout_order_processed', 'wc_w_action_after_checkout');
 
+
+/**
+ * 
+ * @param int $order_id
+ */
 function wc_w_action_after_checkout( $order_id ){
 	if( is_user_logged_in() ){
 		$uid = get_current_user_id();
@@ -231,6 +251,10 @@ function wc_w_action_after_checkout( $order_id ){
 add_action('wp_head', 'wc_m_after_calculate_totals');
 add_action( 'rf_get_the_cart', 'wc_m_after_calculate_totals' );
 
+/**
+ * 
+ * @todo Sets credits to 0 after checkout
+ */
 function wc_m_after_calculate_totals(){
 	if ( WC()->cart->get_cart_contents_count() == 0 ) {
 		set_credit_in_cart( 0 );
@@ -259,8 +283,8 @@ function wc_w_add_to_log( $uid, $amount, $method, $order_id ){
 		case 1: $method = 1; break;
 		default: $method = 0; break;
 	}
-	$arg=array(
-			"post_title"		=>	"",
+	$arg = array(
+			"post_title"		=>	"Logs",
 			"post_content"		=>	"",
 			"post_type"			=>	"wcw_logs",
 			"post_status"		=>	"publish"
@@ -271,6 +295,11 @@ function wc_w_add_to_log( $uid, $amount, $method, $order_id ){
 	add_post_meta( $pid, 'date', date('d M Y') );
 	add_post_meta( $pid, 'oid', $order_id );
 	add_post_meta( $pid, 'amount', $amount );
+	
+	if( is_wcw_notify_admin() ){
+		$user_info = get_userdata( $uid );
+		wcw_ntify_admin( get_option('admin_email'), $user_info->user_login, date('d M Y'), $order_id, $amount, wc_w_get_type( $method ) );
+	}
 }
 
 add_action('wcw_after_changeto_cancel_order', 'action_on_cancel_order');
@@ -290,6 +319,7 @@ function action_on_cancel_order( $array ){
 	}
 	$c = (string)$e;
 	$amount = -1*$es[$c]['line_total'] + $order->get_total();
+	$refunded = is_order_automatic_cancel() ? 1 : 0;
 	$arg = array(
 			"post_title"		=>	"WC Wallet",
 			"post_content"		=>	"",
@@ -301,6 +331,11 @@ function action_on_cancel_order( $array ){
 	add_post_meta( $pid, 'date', date('d M Y') );
 	add_post_meta( $pid, 'oid', $array['order_id'] );
 	add_post_meta( $pid, 'amount', $amount );
+	/*
+	 * 0 => If not refunded
+	 * 1 => If refunded 
+	 */
+	add_post_meta( $pid, 'amount_refund', $refunded );
 
 }
 
@@ -329,7 +364,7 @@ function wc_w_get_type( $type ){
  */
 function this_get_tax( $_this ){
 	$cart = $_this->get_cart();
-	$tax = array();
+	$tax = $tax_rates = array();
 	foreach ( $cart as $cart_item_key => $values ) {
 		
 		$_product = $values['data'];
@@ -417,7 +452,7 @@ function this_get_tax( $_this ){
 			 * Prices exclude tax
 			 */
 		} else {
-	
+			
 			$item_tax_rates        = $tax_rates[ $_product->get_tax_class() ];
 	
 			// Work out a new base price without the shop's base tax
@@ -439,9 +474,23 @@ function this_get_tax( $_this ){
 				$tax[ $key ] = ( isset( $discounted_taxes[ $key ] ) ? $discounted_taxes[ $key ] : 0 ) + ( isset( $_this->taxes[ $key ] ) ? $_this->taxes[ $key ] : 0 );
 			}
 		}
-		$tax = array_map( array( 'WC_Tax', 'round' ), $tax);
+		$tax 				= array_map( array( 'WC_Tax', 'round' ), $tax);
+		$tax 				= array_sum($tax);
+		$shipping_total	 	= WC()->shipping->shipping_total;
+		$shipping_taxes		= WC()->shipping->shipping_taxes;
+		if ( $_this->round_at_subtotal ) {
+			$shipping_tax_total = WC_Tax::get_tax_total( $shipping_taxes );
+			$shipping_taxes     = array_map( array( 'WC_Tax', 'round' ), $shipping_taxes );
+		} else {
+			$shipping_tax_total = array_sum( $shipping_taxes );
+		}
+		$array 				= array(
+				'tax'			=>	$tax,
+				'shipping'		=>	$shipping_total,
+				'shipping_tax'	=> 	$shipping_tax_total
+		);
 	}
-	return array_sum($tax);
+	return $array;
 }
 
 /* All IS functions starts */
@@ -498,6 +547,33 @@ function is_show_remaining_credits(){
 	}
 }
 
+/**
+ * 
+ * @return boolean
+ */
+function is_order_automatic_cancel(){
+	$e = get_option('wcw_automatic_cancel_req');
+	if( $e == 1 ){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+
+/**
+ * 
+ * @return boolean
+ */
+function is_wcw_notify_admin(){
+	$e = get_option('wcw_notify_admin');
+	if( $e == 1 ){
+		return true;
+	}else{
+		return false;
+	}
+}
+
 /* All IS functions ends */
 
 /* Get functions */
@@ -513,22 +589,22 @@ function get_wallet_restricted_amount(){
 function wc_w_get_log(){
 	$args = array(
 			"posts_per_page"	=>	-1,
-			'post_type'        	=> 	'wcw_logs',
-			"orderby"			=>	'date'
+			'post_type'        	=> 	'wcw_logs'
 	);
 	$posts = get_posts( $args );
-
-	foreach( $posts as $post ){
-		$pid = $post->ID;
-
+	$items = array();
+	$i = 0;
+	foreach( $posts as $postt ){
+		$pid = $postt->ID;
 		$items[$i]['oid']		=	get_post_meta( $pid, 'oid', true );
 		$items[$i]['uid']		=	get_post_meta( $pid, 'uid', true );
 		$items[$i]['amount'] 	=	get_post_meta( $pid, 'amount', true );
 		$items[$i]['date']		=	get_post_meta( $pid, 'date', true );
+		$items[$i]['wcw_type']  = 	get_post_meta( $pid, 'wcw_type', true );
 		$items[$i]['ID']		=	$pid;
-
+		$i++;
 	}
-
+	
 	return $items;
 }
 
@@ -553,6 +629,7 @@ function wc_w_get_cancel_requests(){
 			$items[$i]['uid']		=	get_post_meta( $pid, 'uid', true );
 			$items[$i]['amount'] 	=	get_post_meta( $pid, 'amount', true );
 			$items[$i]['date']		=	get_post_meta( $pid, 'date', true );
+			$items[$i]['refund']	=	get_post_meta( $pid, 'amount_refund', true);
 			$items[$i]['ID']		=	$pid;
 			$i++;
 		}
@@ -565,8 +642,47 @@ function wc_w_get_cancel_requests(){
 	
 }
 
+/**
+ * 
+ * @return array $items
+ */
+function get_the_order_in_log(){
+	$args = array(
+			"posts_per_page"	=>	-1,
+			'post_type'        	=> 	'wcw_corequest'
+	);
+	$posts = get_posts( $args );
+	$items = array();
+	$i = 0;
+	foreach( $posts as $postt ){
+		$pid = $postt->ID;
+		if( get_post_meta( $pid, 'amount_refund', true ) == 1 ){
+			$items[] = $pid;
+			$i++;
+		}
+		
+	}
+	
+	return $items;
+}
+
+/**
+ * 
+ * @return array
+ */
+function get_wcw_only_methods(){
+	$array = explode( ",",get_option('wcw_payment_method') );
+	return $array;
+}
+
 /* Get functions */
 
+
+/**
+ * 
+ * @param string $msg
+ * @param string $status
+ */
 function wcw_plugin_success_msg( $msg, $status = "success" ){
 	if( $status == "success" ){
 		echo '<div id="setting-error-settings_updated" class="updated settings-error notice is-dismissible"> 
@@ -576,6 +692,11 @@ function wcw_plugin_success_msg( $msg, $status = "success" ){
 	}
 }
 
+/**
+ * 
+ * @param int $post
+ * @return boolean
+ */
 function wcw_update_form( $post ){
 	if( isset( $post['wcw_payment_method'] ) ){
 		$str = implode( ",", $post['wcw_payment_method'] );
@@ -612,8 +733,38 @@ function wcw_yes_or_no_update( $post, $str ){
 }
 
 /* Cancel Order Starts from Here */
+
+/**
+ * 
+ * @return number
+ */
+function get_count_cancel_request(){
+	$args = array(
+			"posts_per_page"	=>	-1,
+			'post_type'        	=> 	'wcw_corequest',
+			"orderby"			=>	'date'
+	);
+	$posts = get_posts( $args );
+	
+	$i = 0;
+	if( count( $posts ) != 0 ){
+		foreach( $posts as $post ){
+			$pid = $post->ID;
+			$i	=	$i + get_post_meta( $pid, 'amount_refund', true);
+		}
+	}
+	
+	return count( $posts )-$i;
+}
+	
 if( is_cancel_request_enabled() ){
 	add_filter('woocommerce_my_account_my_orders_actions', 'add_wc_cancel_my_account_orders_status', 100, 2);
+	/**
+	 * 
+	 * @param unknown $actions
+	 * @param unknown $order
+	 * @return multitype:string Ambigous <string, mixed>
+	 */
 	function add_wc_cancel_my_account_orders_status( $actions, $order )    {
 	
 		if ($order->id) {
@@ -621,7 +772,7 @@ if( is_cancel_request_enabled() ){
 		}
 	
 	
-		if ($the_order->has_status(array('on-hold', 'pending', 'processing'))) {
+		if ( $the_order->has_status(array('on-hold', 'pending', 'processing')) ) {
 			$actions['cancelled'] = array(
 					'url' 		=> wp_nonce_url(admin_url('admin-ajax.php?action=request_for_cancell_wcw&order_id=' . $order->id), 'mark_order_as_cancell_request'), 
 					'name' 		=> 'Send Cancel Request', 
@@ -634,6 +785,11 @@ if( is_cancel_request_enabled() ){
 	
 	add_action('wp_ajax_request_for_cancell_wcw', 'mark_order_as_cancell_request');
 	add_action('wp_ajax_nopriv_request_for_cancell_wcw', 'mark_order_as_cancell_request');
+	
+	/**
+	 * 
+	 * @todo Ajax to send cancel request
+	 */
 	function mark_order_as_cancell_request()    {
 	
 		if( is_user_logged_in() ){
@@ -646,7 +802,11 @@ if( is_cancel_request_enabled() ){
 		if( $order_id != 0 ){
 			$order = wc_get_order($order_id);
 			do_action( 'wcw_before_changeto_cancel_order', array( 'order_id' => $order_id, 'uid' => get_current_user_id() ) );
-			$order->update_status('wc-cancel-request');
+			if( is_order_automatic_cancel() ){
+				$order->update_status('cancelled');
+			}else{
+				$order->update_status('wc-cancel-request');
+			}
 			do_action( 'wcw_after_changeto_cancel_order', array( 'order_id' => $order_id, 'uid' => get_current_user_id() ) );
 		}
 		wp_safe_redirect(wp_get_referer() ? wp_get_referer() :
@@ -655,6 +815,10 @@ if( is_cancel_request_enabled() ){
 		
 	}
 	
+	/**
+	 * 
+	 * @todo Registed a order status
+	 */
 	function wpex_wc_register_post_statuses() {
 		register_post_status( 'wc-cancel-request', array(
 				'label'                     => _x( 'On Cancel Request', 'WooCommerce Order status', 'wc_wallet' ),
@@ -667,14 +831,50 @@ if( is_cancel_request_enabled() ){
 	}
 	add_filter( 'init', 'wpex_wc_register_post_statuses' );
 	
-	// Add New Order Statuses to WooCommerce
+	/**
+	 * 
+	 * @param array $order_statuses
+	 * @return array
+	 */
 	function wpex_wc_add_order_statuses( $order_statuses ) {
 		$order_statuses['wc-cancel-request'] = _x( 'On Cancel Request', 'WooCommerce Order status', 'wc_wallet' );
 		return $order_statuses;
 	}
 	add_filter( 'wc_order_statuses', 'wpex_wc_add_order_statuses' );
+	
+	
+	add_action('wp_ajax_wcw_refund_order', 'wcw_refund_order');
+	add_action('wp_ajax_nopriv_wcw_refund_order', 'wcw_refund_order');
+	function wcw_refund_order(){
+		if( is_admin() ){
+			$order_id 	=	isset( $_GET['order_id'] ) ? (int)$_GET['order_id'] : false;
+			$pid 		=	isset( $_GET['pid'] ) ? (int)$_GET['pid'] : false;
+			
+			if( $order_id != 0 && $order_id != false && $pid != false ){
+				$order = wc_get_order( $order_id );
+				if( $order !== null ){
+					$order->update_status("cancelled");
+					update_post_meta( $pid, 'amount_refund', 1 );
+				}
+			}
+		}
+		wp_safe_redirect(wp_get_referer() ? wp_get_referer() : admin_url("admin.php?page=wc-wallet-cancel-requests"));
+	}
 }
 
+/**
+ * 
+ * @param string $email
+ * @param string $uname
+ * @param DateInterval $time
+ * @param int $oid
+ * @param int $amount
+ * @param string $type
+ */
+function wcw_ntify_admin( $email, $uname, $time, $oid, $amount, $type ){
+	$message = "Dear Admin, $uname has moved $type of amount $amount for the order #$oid at the time $time";
+	wp_mail( $eamil, "Changes in credits", $message );
+}
 
 }
 ?>

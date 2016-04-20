@@ -21,14 +21,21 @@ If you ever don't want to refund your money instead use as credits for future pu
 
 = Features =
 * User Interfaced to add credits at cart page.
-* No need to refunds in the gateways
+* No need to refunds in the gateways.
 * Automatic update total when credit is larger the cart total or when product is deleted.
+* Send Cancel Order Request and let the admin refund the amount as Credits.
+* Credits restrictions for users.
 
 == Installation ==
 1. Ensure you have latest version of WooCommerce plugin installed ( 2.2 or above )
 2. Unzip and upload contents of the plugin to your /wp-content/plugins/ directory
 3. Activate the plugin through the 'Plugins' menu in WordPress
 
+== Screenshots ==
+1. WC Wallet Cancel Request Page
+2. WC Wallet Settings Page
+3. WC Wallet Cart view
+4. WC Wallet My order with "Send Cancel Request"
 
 == Changelog ==
 

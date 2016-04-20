@@ -1,3 +1,3 @@
 <?php
-//Every man has a history
+//LIMITS EXISTS ONLY IN THE MIND
 ?>

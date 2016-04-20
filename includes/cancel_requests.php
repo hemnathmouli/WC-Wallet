@@ -14,7 +14,7 @@ if( is_cancel_request_enabled() ){
 			<th scope = "col">Transaction ID</th>
 			<th scope = "col">User</th>
 			<th scope = "col">Order Number</th>
-			<th scope = "col">Credits</th>
+			<th scope = "col">Amount</th>
 			<th scope = "col">Date</th>
 			<th scope = "col">Refund</th>
 		</tr>
@@ -31,7 +31,10 @@ if( is_cancel_request_enabled() ){
 			<td><?php echo wc_price( $log["amount"] );  ?></td>
 			<td><?php echo $log["date"]?></td>
 			<td class = "wp-core-ui">
-				<a href = "" id="post-query-submit" class="button">Refund as Credits</a>
+			<?php 
+				$refund = $log['refund'] == 0 ? '<a href = "'.admin_url('admin-ajax.php?action=wcw_refund_order&order_id=' . $log["oid"] .'&pid=' . $log["ID"] ).'" id="post-query-submit" class="button">Refund as Credits</a>' : '<a href = "javascript:void(0);" id="post-query-submit" style="background: rgba(120, 119, 119, 0.21);" class="button">Already Redunded</a>'; 
+				echo $refund;
+			?>
 			</td>
 		<tr>
 		<?php 
@@ -43,7 +46,7 @@ if( is_cancel_request_enabled() ){
 			<th scope = "col">Transaction ID</th>
 			<th scope = "col">User</th>
 			<th scope = "col">Order Number</th>
-			<th scope = "col">Credits</th>
+			<th scope = "col">Amount</th>
 			<th scope = "col">Date</th>
 			<th scope = "col">Refund</th>
 		</tr>

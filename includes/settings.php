@@ -17,7 +17,6 @@ $wcw_remining_credits 		= get_option('wcw_remining_credits') == 1 		? 'checked' 
 $wcw_restrict_max 			= get_option('wcw_restrict_max');
 $wcw_cancel_req 			= get_option('wcw_cancel_req') == 1 			? 'checked' : '';
 $wcw_automatic_cancel_req 	= get_option('wcw_automatic_cancel_req') == 1 	? 'checked' : '';
-$wcw_notify_on_cancel_req 	= get_option('wcw_notify_on_cancel_req') == 1 	? 'checked' : '';
 
 ?>
 <style>
@@ -33,7 +32,7 @@ $wcw_notify_on_cancel_req 	= get_option('wcw_notify_on_cancel_req') == 1 	? 'che
 	<h3 class="title">Gendral Settings</h3>
 	<table class="form-table">
 		<tr>
-			<th scope="row"><label for="wcw_payment_method">Credits Applicable for</label></th>
+			<th scope="row"><label for="wcw_payment_method">Credits Applicable If The Order Are In These Method</label></th>
 			<td>
 				<?php 
 					$array = new WC_Payment_Gateways();
@@ -57,7 +56,7 @@ $wcw_notify_on_cancel_req 	= get_option('wcw_notify_on_cancel_req') == 1 	? 'che
 		
 		<tr>
 			<th scope="row">
-				<label for="wcw_apply_tax">Apply Credits For Tax?</label>
+				<label for="wcw_apply_tax">Apply Credits For Tax and Shipping?</label>
 			</th>
 			<td>
 				<input type = "radio" id = "wcw_apply_tax" name = "wcw_apply_tax" value = "1" <?php echo $wcw_apply_tax_yes; ?>> Yes 
@@ -111,21 +110,11 @@ $wcw_notify_on_cancel_req 	= get_option('wcw_notify_on_cancel_req') == 1 	? 'che
 		
 		<tr>
 			<th scope="row">
-				<label for="wcw_automatic_cancel_req">Automatically Cancel Order On "Send Cancel Request"</label>
+				<label for="wcw_automatic_cancel_req">Automatically Cancel Order On "Send Cancel Request" and Refund Credits</label>
 			</th>
 			<td>
 				<input type = "checkbox" id = "wcw_automatic_cancel_req" name = wcw_automatic_cancel_req <?php echo $wcw_automatic_cancel_req; ?> value = "1"> Yes 
 				<p class="description" id="tagline-description">If this option is not enabled, you need to customly click refund under Cancel Request Page.</p>
-			</td>
-		</tr>
-		
-		<tr>
-			<th scope="row">
-				<label for="wcw_notify_on_cancel_req">Send Email If New Cancel Request Received</label>
-			</th>
-			<td>
-				<input type = "checkbox" id = "wcw_notify_on_cancel_req" name = "wcw_notify_on_cancel_req" <?php echo $wcw_notify_on_cancel_req; ?> value = "1"> Yes 
-				<p class="description" id="tagline-description">Send e-mail to admin if an cancel request is received.</p>
 			</td>
 		</tr>
 	</table>

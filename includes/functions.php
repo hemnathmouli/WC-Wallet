@@ -876,5 +876,15 @@ function wcw_ntify_admin( $email, $uname, $time, $oid, $amount, $type ){
 	wp_mail( $eamil, "Changes in credits", $message );
 }
 
+add_shortcode('wc_wallet_show_balance', 'wc_wallet_show_balance');
+
+function wc_wallet_show_balance(){
+	if( is_user_logged_in() ){
+		echo "Available Credits: ".get_user_meta( get_current_user_id(), "wc_wallet", true );
+	}else{
+		echo "You need to login to see your credits";
+	}
+}
+
 }
 ?>

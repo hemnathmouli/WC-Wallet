@@ -240,12 +240,12 @@ function wc_w_action_after_checkout( $order_id ){
 		$uid = get_current_user_id();
 		$onhold = get_user_meta( $uid, 'onhold_credits',true );
 		$credit = get_user_meta( $uid, 'wc_wallet',true );
-		if( $onhold !== null ){
+		if( $onhold != 0 ){
 			update_user_meta( $uid, 'onhold_credits', 0 );
 			update_user_meta( $uid, 'wc_wallet', $credit-$onhold );
+			wc_w_add_to_log( $uid, $onhold, 0, $order_id );
 		}
 	}
-	wc_w_add_to_log( $uid, $onhold, 0, $order_id );
 }
 
 add_action('wp_head', 'wc_m_after_calculate_totals');

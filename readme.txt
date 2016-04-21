@@ -3,7 +3,7 @@ Contributors: hemnathmouli
 Tags: wc wallet, wc credits, woocommerce wallet, cancelled order to wallet, woocommerce credits 
 Requires at least: 3.5
 Tested up to: 4.4.2
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,3 +41,6 @@ If you ever don't want to refund your money instead use as credits for future pu
 
 = 1.0.0 =
 * First Public Release.
+
+= 1.0.1 =
+* Bug fix

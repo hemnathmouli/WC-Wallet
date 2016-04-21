@@ -5,7 +5,7 @@
  * Author: Hemnath Mouli
  * Author URI: http://hemzware.com
  * Description: Activate this plugin to make the wallet system with woocommerce.!
- * Version: 1.0.0
+ * Version: 1.0.1
  */
 
 if ( ! defined( 'WPINC' ) ) { die; }
@@ -200,8 +200,7 @@ class wc_w{
 			return;
 		}
 		if( array_search( $order_id, get_the_order_in_log() ) === false ) {
-			if( count(get_wcw_only_methods()) == 0 || array_search( get_post_meta( $order->id, '_payment_method', true ), get_wcw_only_methods() ) !== false ){
-				
+			if( count(get_wcw_only_methods()) == 0 || array_search( get_post_meta( $order_id, '_payment_method', true ), get_wcw_only_methods() ) !== false ){
 				$order_total = get_post_meta($order_id, '_order_total', true);
 				$order = wc_get_order( $order_id );
 				$ttyl = $order->get_fees();
@@ -213,7 +212,6 @@ class wc_w{
 				}
 				
 				$c = (string)$e;
-				
 				if( -1*$ttyl[$c]['line_total'] ){
 					$order_autho = get_post_meta($order_id, '_customer_user', true);
 					$author_wallet = get_user_meta( $order_autho, 'wc_wallet', true );

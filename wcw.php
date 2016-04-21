@@ -15,7 +15,7 @@ class wc_w{
 	 * 
 	 * @var The current version of the plugin
 	 */
-	private $version 	= '1.0.0';
+	private $version 	= '1.0.1';
 	
 	/**
 	 * 

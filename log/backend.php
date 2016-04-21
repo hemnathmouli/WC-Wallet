@@ -3,6 +3,7 @@ if(!ABSPATH){
 	exit;
 }
 ?>
+
 <div class = "wrap">
 <h1>Wallet / Credits Logs</h1>
 

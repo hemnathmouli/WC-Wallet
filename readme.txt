@@ -43,4 +43,4 @@ If you ever don't want to refund your money instead use as credits for future pu
 * First Public Release.
 
 = 1.0.1 =
-* Bug fix
+* FIlter updater and Bugfix

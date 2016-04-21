@@ -4,7 +4,7 @@
  * Plugin URI: http://hemnathmouli.github.io/WC-Wallet
  * Author: Hemnath Mouli
  * Author URI: http://hemzware.com
- * Description: Activate this plugin to make the wallet system with woocommerce.!
+ * Description: Activate this plugin to make the wallet system with WooCommerce.!
  * Version: 1.0.1
  */
 

@@ -25,6 +25,7 @@ If you ever don't want to refund your money instead use as credits for future pu
 * Automatic update total when credit is larger the cart total or when product is deleted.
 * Send Cancel Order Request and let the admin refund the amount as Credits.
 * Credits restrictions for users.
+* To show users their balance, use `[wc_wallet_show_balance]` shortcode.
 
 == Installation ==
 1. Ensure you have latest version of WooCommerce plugin installed ( 2.2 or above )

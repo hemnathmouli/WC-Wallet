@@ -2,8 +2,8 @@
 Contributors: hemnathmouli
 Tags: wc wallet, wc credits, woocommerce wallet, cancelled order to wallet, woocommerce credits 
 Requires at least: 3.5
-Tested up to: 4.4.2
-Stable tag: 1.0.1
+Tested up to: 4.5.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,4 +44,19 @@ If you ever don't want to refund your money instead use as credits for future pu
 * First Public Release.
 
 = 1.0.1 =
-* FIlter updater and Bugfix
+* Filter updater and Bugfix
+
+= 1.0.2 =
+* New Features ( Cancel by order status )
+* Bug Fix
+
+== Upgrade Notice ==
+
+= 1.0.0 =
+Good News. New Version is available, with extra feature.
+
+= 1.0.1 =
+Good News. New Version is available, with extra feature.
+
+= 1.0.2 =
+Awesome. We have fixed the bugs and added new Features. Update to 1.0.2

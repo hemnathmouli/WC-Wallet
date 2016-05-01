@@ -68,14 +68,9 @@ function woo_add_cart_fee( $carts ) {
 				// Check if the amount is restricted
 				if( is_wallet_restrict_max() ){
 					// Check the restriction amount with entered amount
-					if( get_wallet_restricted_amount() < $cart_total ){
-						// Add restricted amount if the amount is larger than the restriction
-						if( set_credit_in_cart( get_wallet_restricted_amount() ) ){
-							wc_add_notice( 'Credit is Restricted for the users to '.wc_price( get_wallet_restricted_amount() ).'.!');
-						}else{
-							set_credit_in_cart( 0 );
-							wc_add_notice( 'There is Error while adding credits.!', 'error' );
-						}
+					if( get_wallet_restricted_amount() < $credit ){
+							set_credit_in_cart( get_wallet_restricted_amount() );
+							wc_add_notice( 'Credit is Restricted for the users to '.wc_price( get_wallet_restricted_amount() ).'.!', 'error' );
 					}else{
 						if( $credit <= $in_wallet ){
 							if( $credit <= $cart_total ){
@@ -131,22 +126,29 @@ function woo_add_cart_fee( $carts ) {
 					$cart_total = $cart_total + array_sum($tax);
 				}
 				
+				if( $on_hold > $amount  ){
+					if( set_credit_in_cart( $amount ) ){
+						wc_add_notice( 'You don\'t have sufficient credits.!');
+					}else{
+						set_credit_in_cart( 0 );
+						wc_add_notice( 'There is Error while adding credits.!', 'error' );
+					}
+				}
+				
 				if( is_wallet_restrict_max() ){
 					// Check the restriction amount with entered amount
-					if( get_wallet_restricted_amount() < $on_hold ){
-						if( set_credit_in_cart( get_wallet_restricted_amount() ) ){
-							wc_add_notice( 'Credit is Restricted for the users to '.wc_price( get_wallet_restricted_amount() ).'.!');
+					if( $on_hold <= $amount  ){
+						if( get_wallet_restricted_amount() < $on_hold ){
+								set_credit_in_cart( get_wallet_restricted_amount() );
+								wc_add_notice( 'Credit is Restricted for the users to '.wc_price( get_wallet_restricted_amount() ).'.!', 'error' );
 						}else{
-							set_credit_in_cart( 0 );
-							wc_add_notice( 'There is Error while adding credits.!', 'error' );
-						}
-					}else{
-						if( $on_hold > $cart_total ){
-							if( $amount >= $cart_total ){
-								set_credit_in_cart( $cart_total );
-								wc_add_notice( 'Credits adjusted with total.!' );
-							}else{
-								set_credit_in_cart( 0 );
+							if( $on_hold > $cart_total ){
+								if( $amount >= $cart_total ){
+									set_credit_in_cart( $cart_total );
+									wc_add_notice( 'Credits adjusted with total.!' );
+								}else{
+									set_credit_in_cart( 0 );
+								}
 							}
 						}
 					}
@@ -249,7 +251,6 @@ function wc_w_action_after_checkout( $order_id ){
 }
 
 add_action('wp_head', 'wc_m_after_calculate_totals');
-add_action( 'rf_get_the_cart', 'wc_m_after_calculate_totals' );
 
 /**
  * 
@@ -708,6 +709,12 @@ function wcw_update_form( $post ){
 	if( isset( $post['wcw_apply_tax'] ) ){
 		update_option('wcw_apply_tax', $post['wcw_apply_tax']);
 	}
+	
+	if( isset( $post['wcw_transfer_only'] ) ){
+		update_option('wcw_transfer_only', json_encode( $post['wcw_transfer_only'] ) );
+	}else{
+		update_option('wcw_transfer_only', "" );
+	}
 		
 	wcw_yes_or_no_update( $post, 'wcw_restrict_max' );
 	wcw_yes_or_no_update( $post, 'wcw_notify_admin' );
@@ -772,7 +779,7 @@ if( is_cancel_request_enabled() ){
 		}
 	
 	
-		if ( $the_order->has_status(array('on-hold', 'pending', 'processing')) ) {
+		if ( wcw_check_the_order_status( $order->id )  ) {
 			$actions['cancelled'] = array(
 					'url' 		=> wp_nonce_url(admin_url('admin-ajax.php?action=request_for_cancell_wcw&order_id=' . $order->id), 'mark_order_as_cancell_request'), 
 					'name' 		=> 'Send Cancel Request', 
@@ -883,6 +890,28 @@ function wc_wallet_show_balance(){
 		echo "Available Credits: ".wc_price(get_user_meta( get_current_user_id(), "wc_wallet", true ));
 	}else{
 		echo "You need to login to see your credits";
+	}
+}
+
+
+/**
+ * 
+ * @param int $order_type
+ * @param string $order_status
+ * 
+ * @since 1.0.2
+ * 
+ */
+function wcw_check_the_order_status( $order_id ){
+	$order 		= 	new WC_Order( $order_id );
+	$order_type	=	get_post_meta( $order_id, '_payment_method', true );
+	$order_status	=	"wc-".$order->get_status();
+	$array	=	json_decode( get_option('wcw_transfer_only'), true );
+	$order_array = isset($array[$order_type])	?	$array[$order_type]	:	false;
+	if( $order_array&&array_search($order_status,  $order_array) !== null){
+		return true;
+	}else{
+		return false;
 	}
 }
 

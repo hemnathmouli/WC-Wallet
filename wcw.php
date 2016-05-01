@@ -5,7 +5,7 @@
  * Author: Hemnath Mouli
  * Author URI: http://hemzware.com
  * Description: Activate this plugin to make the wallet system with WooCommerce.!
- * Version: 1.0.1
+ * Version: 1.0.2
  */
 
 if ( ! defined( 'WPINC' ) ) { die; }
@@ -43,6 +43,7 @@ class wc_w{
 	 */
 	function add_options(){
 		add_option('wcw_payment_method');
+		add_option('wcw_transfer_only');
 		add_option('wcw_apply_tax', 1);
 		add_option('wcw_restrict_max','');
 		add_option('wcw_notify_admin',  1);

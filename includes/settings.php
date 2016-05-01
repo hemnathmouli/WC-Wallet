@@ -10,6 +10,7 @@ if( isset( $_POST["submit"] ) ){
 }
 
 $wcw_payment_method 		= explode( ",",get_option('wcw_payment_method') );
+$wcw_transfer_only 			= json_decode( get_option('wcw_transfer_only'), true );
 $wcw_apply_tax_yes 			= get_option('wcw_apply_tax') == 1 				? 'checked' : '';
 $wcw_apply_tax_no 			= get_option('wcw_apply_tax') == 0 				? 'checked' : '';
 $wcw_notify_admin 			= get_option('wcw_notify_admin') == 1 			? 'checked' : '';
@@ -24,6 +25,11 @@ $wcw_automatic_cancel_req 	= get_option('wcw_automatic_cancel_req') == 1 	? 'che
 	width: 100%;
 	float: left;
 	margin-top: 10px;
+}
+
+.w200{
+	width: 200px;
+	float: left;
 }
 </style>
 <div class = "wrap">
@@ -51,6 +57,40 @@ $wcw_automatic_cancel_req 	= get_option('wcw_automatic_cancel_req') == 1 	? 'che
 					}
 				?>
 				<p class="description" id="tagline-description">When order is cancelled, if the above checked method are there, the cancel request can be processed.</p>
+			</td>
+		</tr>
+		
+		<tr>
+			<th scope="row">
+				<label for="wcw_transfer_only">Credits Transfered When Order Status is in</label>
+			</th>
+			<td>
+				<?php 
+					$sts = wc_get_order_statuses();
+					$array = new WC_Payment_Gateways();
+					$methods = $array->get_available_payment_gateways();
+					if( count($methods) != 0 ){
+						echo "<table>";
+						foreach( $methods as $key => $method ){
+							$current_status = $wcw_transfer_only["$key"];
+							echo "<tr>";
+							echo "<td style ='padding-left: 0px; vertical-align: top;'>" . $method->title . "</td><td>";
+							foreach( $sts as $keys => $status ){
+								?>
+								<label class = "w200" for="dashboard_right_now-hide_<?php echo $keys;?>_<?php echo $key;?>">
+									<input class="hide-postbox-tog" name="wcw_transfer_only[<?php echo $key; ?>][]" type="checkbox" <?php if( $current_status&&in_array($keys, $current_status) ){ echo "checked"; }  ?> id="dashboard_right_now-hide_<?php echo $keys;?>_<?php echo $key;?>" value="<?php echo $keys; ?>">
+									<?php echo $status; ?>						
+								</label>
+								<?php 
+							}
+							echo "</td></tr>";
+						}
+						echo "</table>";
+					}else{
+						echo "No Payment Methods found.!";
+					}
+				?>
+				<p class="description" id="tagline-description">This option is used to filter transfer of credits only if the checked status are given.</p>
 			</td>
 		</tr>
 		

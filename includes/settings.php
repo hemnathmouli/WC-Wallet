@@ -18,6 +18,8 @@ $wcw_remining_credits 		= get_option('wcw_remining_credits') == 1 		? 'checked' 
 $wcw_restrict_max 			= get_option('wcw_restrict_max');
 $wcw_cancel_req 			= get_option('wcw_cancel_req') == 1 			? 'checked' : '';
 $wcw_automatic_cancel_req 	= get_option('wcw_automatic_cancel_req') == 1 	? 'checked' : '';
+$wcw_is_float_value_no		= get_option('wcw_is_float_value') == 0			? 'checked' : '';
+$wcw_is_float_value_yes		= get_option('wcw_is_float_value') == 1			? 'checked' : '';
 
 ?>
 <style>
@@ -101,6 +103,17 @@ $wcw_automatic_cancel_req 	= get_option('wcw_automatic_cancel_req') == 1 	? 'che
 			<td>
 				<input type = "radio" id = "wcw_apply_tax" name = "wcw_apply_tax" value = "1" <?php echo $wcw_apply_tax_yes; ?>> Yes 
 				<input type = "radio" id = "wcw_apply_tax" name = "wcw_apply_tax" value = "0" <?php echo $wcw_apply_tax_no; ?>> No
+			</td>
+		</tr>
+		
+		<tr>
+			<th scope="row">
+				<label for="wcw_is_float_value">Validate round value</label>
+			</th>
+			<td>
+				<input type = "radio" id = "wcw_is_float_value" name = "wcw_is_float_value" value = "1" <?php echo $wcw_is_float_value_yes; ?>> Yes 
+				<input type = "radio" id = "wcw_is_float_value" name = "wcw_is_float_value" value = "0" <?php echo $wcw_is_float_value_no; ?>> No
+				<p class="description" id="tagline-description">Enabling this option, can values can be give as 200.99 and disabling this, validated as 200 or 210 ( No decimal ).</p>
 			</td>
 		</tr>
 		

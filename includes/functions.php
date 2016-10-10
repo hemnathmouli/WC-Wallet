@@ -202,7 +202,7 @@ function wc_w_cart_hook(){
 			}
 		</style>
 		<div class = "Credits">
-			<input type = "number" class = "input-text credits_amount" id = "coupon_code" name = "wc_w_field" placeholder = "Use Credits" value = "<?php echo $on_hold; ?>" min = "0" max = "<?php echo $amount; ?>">
+			<input type = "number" class = "input-text credits_amount" id = "coupon_code" name = "wc_w_field" placeholder = "Use Credits" <?php if( is_wcw_is_float_value() ){ echo 'step="0.01"'; }?> value = "<?php echo $on_hold; ?>" min = "0" max = "<?php echo $amount; ?>">
 			<input type="submit" class="button" name="add_credits" value="Add / Update Credits">
 			<?php if( is_show_remaining_credits() ){ ?>
 				<span class = "credits-text">Your Credits left is <b><?php echo wc_price( $amount ); ?></b> <?php if( $on_hold != "" ){ echo "- ".wc_price($on_hold)." = <b>".wc_price($amount-$on_hold)."<b>"; }?></span>
@@ -496,6 +496,10 @@ function this_get_tax( $_this ){
 
 /* All IS functions starts */
 
+function is_wcw_is_float_value(){
+	return get_option( "wcw_is_float_value" );
+}
+
 /**
  * 
  * @return boolean
@@ -710,6 +714,10 @@ function wcw_update_form( $post ){
 		update_option('wcw_apply_tax', $post['wcw_apply_tax']);
 	}
 	
+	if( isset( $post['wcw_is_float_value'] ) ){
+		update_option('wcw_is_float_value', $post['wcw_is_float_value']);
+	}
+	
 	if( isset( $post['wcw_transfer_only'] ) ){
 		update_option('wcw_transfer_only', json_encode( $post['wcw_transfer_only'] ) );
 	}else{
@@ -897,18 +905,22 @@ function wc_wallet_show_balance(){
 /**
  * 
  * @param int $order_type
- * @param string $order_status
+ * @param string $old_status
  * 
  * @since 1.0.2
+ * @property 1.0.4 accepts credits again which is used already
  * 
  */
-function wcw_check_the_order_status( $order_id ){
+function wcw_check_the_order_status( $order_id, $old_status ){
 	$order 		= 	new WC_Order( $order_id );
 	$order_type	=	get_post_meta( $order_id, '_payment_method', true );
-	$order_status	=	"wc-".$order->get_status();
+	$order_status	=	"wc-".$old_status;
 	$array	=	json_decode( get_option('wcw_transfer_only'), true );
+	$order_total = get_post_meta($order_id, '_order_total', true);
 	$order_array = isset($array[$order_type])	?	$array[$order_type]	:	false;
-	if( $order_array&&array_search($order_status,  $order_array) !== null){
+	if( $order_total == 0 ){
+		return true;
+	}else if( $order_array && array_search( $order_status,  $order_array ) !== false ){
 		return true;
 	}else{
 		return false;

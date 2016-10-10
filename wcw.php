@@ -5,7 +5,7 @@
  * Author: Hemnath Mouli
  * Author URI: http://hemzware.com
  * Description: Activate this plugin to make the wallet system with WooCommerce.!
- * Version: 1.0.2
+ * Version: 1.0.4
  */
 
 if ( ! defined( 'WPINC' ) ) { die; }
@@ -15,7 +15,7 @@ class wc_w{
 	 * 
 	 * @var The current version of the plugin
 	 */
-	private $version 	= '1.0.1';
+	private $version 	= '1.0.4';
 	
 	/**
 	 * 
@@ -50,6 +50,7 @@ class wc_w{
 		add_option('wcw_remining_credits', 1);
 		add_option('wcw_cancel_req', 1);
 		add_option('wcw_automatic_cancel_req');
+		add_option('wcw_is_float_value', 0);
 	}
 	
 	/**
@@ -201,7 +202,8 @@ class wc_w{
 			return;
 		}
 		if( array_search( $order_id, get_the_order_in_log() ) === false ) {
-			if( count(get_wcw_only_methods()) == 0 || array_search( get_post_meta( $order_id, '_payment_method', true ), get_wcw_only_methods() ) !== false ){
+			$opm	=	(array_search( get_post_meta( $order_id, '_payment_method', true ), get_wcw_only_methods() ) !== false || get_post_meta( $order_id, '_payment_method', true ) == "" ) ? true : false; 
+			if( count(get_wcw_only_methods()) != 0 && $opm && wcw_check_the_order_status( $order_id, $old_status ) ){
 				$order_total = get_post_meta($order_id, '_order_total', true);
 				$order = wc_get_order( $order_id );
 				$ttyl = $order->get_fees();

@@ -5,17 +5,21 @@
  * Author: Hemnath Mouli
  * Author URI: http://hemzware.com
  * Description: Activate this plugin to make the wallet system with WooCommerce.!
- * Version: 1.0.4
+ * Version: 1.0.5
+ * Text Domain: wc-wallet
  */
 
 if ( ! defined( 'WPINC' ) ) { die; }
+
+define( "WC_WALLET_TEXT", "wc-wallet" );
+
 class wc_w{
 	
 	/**
 	 * 
 	 * @var The current version of the plugin
 	 */
-	private $version 	= '1.0.4';
+	private $version 	= '1.0.5';
 	
 	/**
 	 * 
@@ -62,7 +66,7 @@ class wc_w{
 		add_menu_page('Wallet', 'WC Wallet', 'administrator', 'wallet', array( wc_w, 'wc_w_menu_content' ), 'dashicons-nametag', '56' );
 		add_submenu_page( 'wallet', 'Credits logs','Credits logs', 'administrator', 'wallet', array( wc_w, 'wc_w_menu_content' ) );
 		add_submenu_page( 'wallet', 'Cancel Requests', 'Cancel Requests '.$e->request_count(), 'administrator', 'wc-wallet-cancel-requests', array( wc_w, 'wc_w_menu_cancel_request' ) );
-		add_submenu_page( 'wallet', 'Settings', 'Settings', 'administrator', 'wc-wallet-settings', array( wc_w, 'wc_w_menu_settings' ) );
+		add_submenu_page( 'wallet', __('Settings', WC_WALLET_TEXT), __('Settings', WC_WALLET_TEXT), 'administrator', 'wc-wallet-settings', array( wc_w, 'wc_w_menu_settings' ) );
 	}
 	
 	/**
@@ -72,26 +76,26 @@ class wc_w{
 	function wc_w_add_post_type(){
 		
 			$labels = array(
-					'name'                => _x( 'Cancel Order Request', 'Cancel Order', 'wcw_cancel_order_request' ),
-					'singular_name'       => _x( 'Cancel Order Request', 'Cancel Order', 'wcw_cancel_order_request' ),
-					'menu_name'           => __( 'Cancel Order', 'wcw_cancel_order_request' ),
-					'parent_item_colon'   => __( 'Parent Cancel Order', 'wcw_cancel_order_request' ),
-					'all_items'           => __( 'All Cancel Order', 'wcw_cancel_order_request' ),
-					'view_item'           => __( 'View Cancel Order', 'wcw_cancel_order_request' ),
-					'add_new_item'        => __( 'Add New Cancel Order', 'wcw_cancel_order_request' ),
-					'add_new'             => __( 'Add New', 'wcw_cancel_order_request' ),
-					'edit_item'           => __( 'Edit Cancel Order', 'wcw_cancel_order_request' ),
-					'update_item'         => __( 'Update Cancel Order', 'wcw_cancel_order_request' ),
-					'search_items'        => __( 'Search Cancel Order', 'wcw_cancel_order_request' ),
-					'not_found'           => __( 'Not Found', 'wcw_cancel_order_request' ),
-					'not_found_in_trash'  => __( 'Not found in Trash', 'wcw_cancel_order_request' ),
+					'name'                => _x( 'Cancel Order Request', 'Cancel Order', WC_WALLET_TEXT ),
+					'singular_name'       => _x( 'Cancel Order Request', 'Cancel Order', WC_WALLET_TEXT ),
+					'menu_name'           => __( 'Cancel Order', WC_WALLET_TEXT ),
+					'parent_item_colon'   => __( 'Parent Cancel Order', WC_WALLET_TEXT ),
+					'all_items'           => __( 'All Cancel Order', WC_WALLET_TEXT ),
+					'view_item'           => __( 'View Cancel Order', WC_WALLET_TEXT ),
+					'add_new_item'        => __( 'Add New Cancel Order', WC_WALLET_TEXT ),
+					'add_new'             => __( 'Add New', WC_WALLET_TEXT ),
+					'edit_item'           => __( 'Edit Cancel Order', WC_WALLET_TEXT ),
+					'update_item'         => __( 'Update Cancel Order', WC_WALLET_TEXT ),
+					'search_items'        => __( 'Search Cancel Order', WC_WALLET_TEXT ),
+					'not_found'           => __( 'Not Found', WC_WALLET_TEXT ),
+					'not_found_in_trash'  => __( 'Not found in Trash', WC_WALLET_TEXT ),
 			);
 		
 			// Set other options for Custom Post Type
 		
 			$args = array(
-					'label'               => __( 'Cancel Order Request', 'wcw_cancel_order_request' ),
-					'description'         => __( 'Cancel Order Request', 'wcw_cancel_order_request' ),
+					'label'               => __( 'Cancel Order Request', WC_WALLET_TEXT ),
+					'description'         => __( 'Cancel Order Request', WC_WALLET_TEXT ),
 					'labels'              => $labels,
 					// Features this CPT supports in Post Editor
 					'supports'            => array( 'title', 'editor' ),
@@ -111,26 +115,26 @@ class wc_w{
 			register_post_type( 'wcw_corequest', $args );
 			
 			$labels = array(
-					'name'                => _x( 'WC log', 'WC log', 'wcw_logs' ),
-					'singular_name'       => _x( 'WC log', 'WC log', 'wcw_logs' ),
-					'menu_name'           => __( 'WC log', 'wcw_logs' ),
-					'parent_item_colon'   => __( 'Parent WC log', 'wcw_logs' ),
-					'all_items'           => __( 'All WC log', 'wcw_logs' ),
-					'view_item'           => __( 'View WC log', 'wcw_logs' ),
-					'add_new_item'        => __( 'Add New WC log', 'wcw_logs' ),
-					'add_new'             => __( 'Add New WC log', 'wcw_logs' ),
-					'edit_item'           => __( 'Edit WC log', 'wcw_logs' ),
-					'update_item'         => __( 'Update WC log', 'wcw_logs' ),
-					'search_items'        => __( 'Search WC log', 'wcw_logs' ),
-					'not_found'           => __( 'Not Found', 'wcw_logs' ),
-					'not_found_in_trash'  => __( 'Not found in Trash', 'wcw_logs' ),
+					'name'                => _x( 'WC log', 'WC log', WC_WALLET_TEXT ),
+					'singular_name'       => _x( 'WC log', 'WC log', WC_WALLET_TEXT ),
+					'menu_name'           => __( 'WC log', WC_WALLET_TEXT ),
+					'parent_item_colon'   => __( 'Parent WC log', WC_WALLET_TEXT ),
+					'all_items'           => __( 'All WC log', WC_WALLET_TEXT ),
+					'view_item'           => __( 'View WC log', WC_WALLET_TEXT ),
+					'add_new_item'        => __( 'Add New WC log', WC_WALLET_TEXT ),
+					'add_new'             => __( 'Add New WC log', WC_WALLET_TEXT ),
+					'edit_item'           => __( 'Edit WC log', WC_WALLET_TEXT ),
+					'update_item'         => __( 'Update WC log', WC_WALLET_TEXT ),
+					'search_items'        => __( 'Search WC log', WC_WALLET_TEXT ),
+					'not_found'           => __( 'Not Found', WC_WALLET_TEXT ),
+					'not_found_in_trash'  => __( 'Not found in Trash', WC_WALLET_TEXT ),
 			);
 			
 			// Set other options for Custom Post Type
 			
 			$args = array(
-					'label'               => __( 'WC log', 'wcw_logs' ),
-					'description'         => __( 'WC log', 'wcw_logs' ),
+					'label'               => __( 'WC log', WC_WALLET_TEXT ),
+					'description'         => __( 'WC log', WC_WALLET_TEXT ),
 					'labels'              => $labels,
 					// Features this CPT supports in Post Editor
 					'supports'            => array( 'title', 'editor' ),
@@ -147,7 +151,7 @@ class wc_w{
 					'publicly_queryable'  => true,
 					'capability_type'     => 'page',
 			);
-			register_post_type( 'wcw_logs', $args );
+			register_post_type( WC_WALLET_TEXT, $args );
 		
 		
 			add_action( 'admin_menu', array(__CLASS__, 'wc_w_add_menus'), 5 );
@@ -257,7 +261,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
  * @todo Notice admin to activate WooCommerce Plugin
  */
 function wc_wallet_notice() {
-	echo '<div class="error"><p><strong> <i> WC Wallet </i> </strong> Requires <a href="'.admin_url( 'plugin-install.php?tab=plugin-information&plugin=woocommerce').'"> <strong> <u>Woocommerce</u></strong>  </a> To Be Installed And Activated </p></div>';
+	echo '<div class="error"><p><strong> <i> WC Wallet </i> </strong> '.__('Requires', WC_WALLET_TEXT).' <a href="'.admin_url( 'plugin-install.php?tab=plugin-information&plugin=woocommerce').'"> <strong> <u>Woocommerce</u></strong>  </a> '.__('To Be Installed And Activated', WC_WALLET_TEXT).' </p></div>';
 }
 
 ?>

@@ -2,8 +2,8 @@
 Contributors: hemnathmouli
 Tags: wc wallet, wc credits, woocommerce wallet, cancelled order to wallet, woocommerce credits 
 Requires at least: 3.5
-Tested up to: 4.5.1
-Stable tag: 1.0.4
+Tested up to: 4.6.1
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,6 +26,7 @@ If you ever don't want to refund your money instead use as credits for future pu
 * Send Cancel Order Request and let the admin refund the amount as Credits.
 * Credits restrictions for users.
 * To show users their balance, use `[wc_wallet_show_balance]` shortcode.
+* Offer credits for new users.
 
 == Installation ==
 1. Ensure you have latest version of WooCommerce plugin installed ( 2.2 or above )
@@ -56,6 +57,11 @@ If you ever don't want to refund your money instead use as credits for future pu
 = 1.0.4 =
 * Float value update
 
+= 1.0.5 =
+* Bug fix
+* Offer credits for new users
+* Added .pot for translation
+
 == Upgrade Notice ==
 
 = 1.0.0 =
@@ -72,3 +78,6 @@ Awesome. We have fixed the bugs and added new Features. Update to 1.0.3
 
 = 1.0.4 =
 Awesome. We have fixed the bugs and added new Features. Update to 1.0.4
+
+= 1.0.5 =
+New bug fix and added some more features

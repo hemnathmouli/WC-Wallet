@@ -16,6 +16,7 @@ $wcw_apply_tax_no 			= get_option('wcw_apply_tax') == 0 				? 'checked' : '';
 $wcw_notify_admin 			= get_option('wcw_notify_admin') == 1 			? 'checked' : '';
 $wcw_remining_credits 		= get_option('wcw_remining_credits') == 1 		? 'checked' : '';
 $wcw_restrict_max 			= get_option('wcw_restrict_max');
+$wcw_new_user_credits		= get_option('wcw_new_user_credits');
 $wcw_cancel_req 			= get_option('wcw_cancel_req') == 1 			? 'checked' : '';
 $wcw_automatic_cancel_req 	= get_option('wcw_automatic_cancel_req') == 1 	? 'checked' : '';
 $wcw_is_float_value_no		= get_option('wcw_is_float_value') == 0			? 'checked' : '';
@@ -37,10 +38,10 @@ $wcw_is_float_value_yes		= get_option('wcw_is_float_value') == 1			? 'checked' :
 <div class = "wrap">
 <h1>WC Wallet Settings</h1>
 <form method="post">
-	<h3 class="title">Gendral Settings</h3>
+	<h3 class="title"><?php _e( 'Gendral Settings', WC_WALLET_TEXT ); ?></h3>
 	<table class="form-table">
 		<tr>
-			<th scope="row"><label for="wcw_payment_method">Credits Applicable If The Order Are In These Method</label></th>
+			<th scope="row"><label for="wcw_payment_method"><?php _e( 'Credits Applicable If The Order Are In These Method', WC_WALLET_TEXT ); ?></label></th>
 			<td>
 				<?php 
 					$array = new WC_Payment_Gateways();
@@ -55,16 +56,16 @@ $wcw_is_float_value_yes		= get_option('wcw_is_float_value') == 1			? 'checked' :
 				<?php 
 						}
 					}else{
-						echo "No Payment Methods found.!";
+						_e("No Payment Methods found.!", WC_WALLET_TEXT);
 					}
 				?>
-				<p class="description" id="tagline-description">When order is cancelled, if the above checked method are there, the cancel request can be processed.</p>
+				<p class="description" id="tagline-description"><?php _e( 'When order is cancelled, if the above checked method are there, the cancel request can be processed.', WC_WALLET_TEXT ); ?></p>
 			</td>
 		</tr>
 		
 		<tr>
 			<th scope="row">
-				<label for="wcw_transfer_only">Credits Transfered When Order Status is in</label>
+				<label for="wcw_transfer_only">><?php _e( 'Credits Transfered When Order Status is in', WC_WALLET_TEXT ); ?></label>
 			</th>
 			<td>
 				<?php 
@@ -92,13 +93,13 @@ $wcw_is_float_value_yes		= get_option('wcw_is_float_value') == 1			? 'checked' :
 						echo "No Payment Methods found.!";
 					}
 				?>
-				<p class="description" id="tagline-description">This option is used to filter transfer of credits only if the checked status are given.</p>
+				<p class="description" id="tagline-description"><?php _e( 'This option is used to filter transfer of credits only if the checked status are given.', WC_WALLET_TEXT );  ?></p>
 			</td>
 		</tr>
 		
 		<tr>
 			<th scope="row">
-				<label for="wcw_apply_tax">Apply Credits For Tax and Shipping?</label>
+				<label for="wcw_apply_tax"><?php _e( 'Apply Credits For Tax and Shipping?', WC_WALLET_TEXT ); ?></label>
 			</th>
 			<td>
 				<input type = "radio" id = "wcw_apply_tax" name = "wcw_apply_tax" value = "1" <?php echo $wcw_apply_tax_yes; ?>> Yes 
@@ -108,72 +109,82 @@ $wcw_is_float_value_yes		= get_option('wcw_is_float_value') == 1			? 'checked' :
 		
 		<tr>
 			<th scope="row">
-				<label for="wcw_is_float_value">Validate round value</label>
+				<label for="wcw_is_float_value"><?php _e( 'Validate round value', WC_WALLET_TEXT ); ?></label>
 			</th>
 			<td>
 				<input type = "radio" id = "wcw_is_float_value" name = "wcw_is_float_value" value = "1" <?php echo $wcw_is_float_value_yes; ?>> Yes 
 				<input type = "radio" id = "wcw_is_float_value" name = "wcw_is_float_value" value = "0" <?php echo $wcw_is_float_value_no; ?>> No
-				<p class="description" id="tagline-description">Enabling this option, can values can be give as 200.99 and disabling this, validated as 200 or 210 ( No decimal ).</p>
+				<p class="description" id="tagline-description"><?php _e('Enabling this option, can values can be give as 200.99 and disabling this, validated as 200 or 210 ( No decimal ).', WC_WALLET_TEXT); ?></p>
 			</td>
 		</tr>
 		
 		<tr>
 			<th scope="row">
-				<label for="wcw_restrict_max">Restrict Maximum credits</label>
+				<label for="wcw_restrict_max"><?php _e( 'Restrict Maximum credits', WC_WALLET_TEXT ); ?></label>
 			</th>
 			<td>
 				<input name="wcw_restrict_max" type="number" id="wcw_restrict_max" value = "<?php echo $wcw_restrict_max; ?>" class="regular-text">
-				<p class="description" id="tagline-description">This can restrict maximum credits usage for a person. Leave blank for no restrict.</p>
+				<p class="description" id="tagline-description"><?php _e( 'This can restrict maximum credits usage for a person. Leave blank for no restrict.', WC_WALLET_TEXT );?></p>
 			</td>
 		</tr>
 		
 		<tr>
 			<th scope="row">
-				<label for="wcw_notify_admin">Notify Admin</label>
+				<label for="wcw_notify_admin"><?php _e( 'Notify Admin', WC_WALLET_TEXT ); ?></label>
 			</th>
 			<td>
 				<input type = "checkbox" id = "wcw_notify_admin" name = "wcw_notify_admin" value = "1" <?php echo $wcw_notify_admin; ?>> Yes 
-				<p class="description" id="tagline-description">Notify admin if any changes happen in user wallet.</p>
+				<p class="description" id="tagline-description"><?php _e( 'Notify admin if any changes happen in user wallet.', WC_WALLET_TEXT ); ?></p>
 			</td>
 		</tr>
 		
 		<tr>
 			<th scope="row">
-				<label for="wcw_remining_credits">Show Credits Remining In Cart</label>
+				<label for="wcw_remining_credits"><?php _e('Show Credits Remining In Cart', WC_WALLET_TEXT); ?></label>
 			</th>
 			<td>
 				<input type = "checkbox" id = "wcw_remining_credits" name = "wcw_remining_credits" <?php echo $wcw_remining_credits; ?> value = "1"> Yes 
-				<p class="description" id="tagline-description">Hide or Show the remaining credits available for a user in the cart page.</p>
+				<p class="description" id="tagline-description"><?php _e( 'Hide or Show the remaining credits available for a user in the cart page.', WC_WALLET_TEXT ); ?></p>
+			</td>
+		</tr>
+		
+		<tr>
+			<th scope="row">
+				<label for="wcw_new_user_credits"><?php _e( 'New user credits', WC_WALLET_TEXT ); ?></label>
+			</th>
+			<td>
+				<input name="wcw_new_user_credits" type="number" id="wcw_new_user_credits" value = "<?php echo $wcw_new_user_credits; ?>" class="regular-text">
+				<p class="description" id="tagline-description"><?php _e( 'Offer credits for new users, just like coupon.', WC_WALLET_TEXT );  ?></p>
 			</td>
 		</tr>
 		
 	</table>
 	
-	<h3 class="title">Send Cancel Request Option</h3>
+	<h3 class="title"><?php _e( 'Send Cancel Request Option', WC_WALLET_TEXT ); ?></h3>
 	<table class="form-table">		
 		<tr>
 			<th scope="row">
-				<label for="wcw_cancel_req">Enable "Send Cancel Request"</label>
+				<label for="wcw_cancel_req"><?php _e( 'Enable "Send Cancel Request"', WC_WALLET_TEXT ); ?></label>
 			</th>
 			<td>
 				<input type = "checkbox" id = "wcw_cancel_req" name = "wcw_cancel_req" <?php echo $wcw_cancel_req; ?> value = "1"> Yes 
-				<p class="description" id="tagline-description">Enabling this will add a button called "Send Cancel Request" in my-account page.</p>
+				<p class="description" id="tagline-description"><?php _e( 'Enabling this will add a button called "Send Cancel Request" in my-account page.', WC_WALLET_TEXT ); ?></p>
 			</td>
 		</tr>
 		
 		<tr>
 			<th scope="row">
-				<label for="wcw_automatic_cancel_req">Automatically Cancel Order On "Send Cancel Request" and Refund Credits</label>
+				<label for="wcw_automatic_cancel_req"><?php _e( 'Automatically Cancel Order On "Send Cancel Request" and Refund Credits', WC_WALLET_TEXT ); ?></label>
 			</th>
 			<td>
 				<input type = "checkbox" id = "wcw_automatic_cancel_req" name = wcw_automatic_cancel_req <?php echo $wcw_automatic_cancel_req; ?> value = "1"> Yes 
-				<p class="description" id="tagline-description">If this option is not enabled, you need to customly click refund under Cancel Request Page.</p>
+				<p class="description" id="tagline-description"><?php _e( 'If this option is not enabled, you need to customly click refund under Cancel Request Page.', WC_WALLET_TEXT ); ?></p>
 			</td>
 		</tr>
 	</table>
 	
 	<p class="submit">
-		<input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
+		<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Save Changes', WC_WALLET_TEXT ); ?>">
 	</p>
 </form>
 </div>

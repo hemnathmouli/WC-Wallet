@@ -75,39 +75,39 @@ function woo_add_cart_fee( $carts ) {
 						if( $credit <= $in_wallet ){
 							if( $credit <= $cart_total ){
 								if( set_credit_in_cart( $credit ) ){
-									wc_add_notice( 'Credits added sucessfully.!');
+									wc_add_notice( __('Credits added sucessfully.!', WC_WALLET_TEXT) );
 								}else{
 									set_credit_in_cart( 0 );
-									wc_add_notice( 'There is Error while adding credits.!', 'error' );
+									wc_add_notice( __('There is Error while adding credits.!', WC_WALLET_TEXT), 'error' );
 								}
 							}else if( $credit > $cart_total ){
 								if( set_credit_in_cart( $cart_total ) ){
-									wc_add_notice( 'Credits adjusted with total.!');
+									wc_add_notice( __('Credits adjusted with total.!', WC_WALLET_TEXT) );
 								}else{
 									set_credit_in_cart( 0 );
-									wc_add_notice( 'You dont\'t have sufficient credits in your account.', 'error' );
+									wc_add_notice( __('You dont\'t have sufficient credits in your account.', WC_WALLET_TEXT ) , 'error' );
 								}
 							}
 						}else{
 							set_credit_in_cart( 0 );
-							wc_add_notice( 'You dont\'t have sufficient credits in your account.', 'error' );
+							wc_add_notice( __( 'You dont\'t have sufficient credits in your account.', WC_WALLET_TEXT ), 'error' );
 						}
 					}
 				}else{
 					if( $credit <= $in_wallet ){
 						if( $credit <= $cart_total ){
 							if( set_credit_in_cart( $credit ) ){
-								wc_add_notice( 'Credits added sucessfully.!');
+								wc_add_notice( __('Credits added sucessfully.!', WC_WALLET_TEXT ) );
 							}else{
 								set_credit_in_cart( 0 );
-								wc_add_notice( 'There is Error while adding credits.!', 'error' );
+								wc_add_notice( __('There is Error while adding credits.!', WC_WALLET_TEXT ), 'error' );
 							}
 						}else if( $credit > $cart_total ){
 							if( set_credit_in_cart( $cart_total ) ){
-								wc_add_notice( 'Credits adjusted with total.!');
+								wc_add_notice( __('Credits adjusted with total.!', WC_WALLET_TEXT ) );
 							}else{
 								set_credit_in_cart( 0 );
-								wc_add_notice( 'You dont\'t have sufficient credits in your account.', 'error' );
+								wc_add_notice( __('You dont\'t have sufficient credits in your account.', WC_WALLET_TEXT ) , 'error' );
 							}
 						}
 					}else{
@@ -128,10 +128,10 @@ function woo_add_cart_fee( $carts ) {
 				
 				if( $on_hold > $amount  ){
 					if( set_credit_in_cart( $amount ) ){
-						wc_add_notice( 'You don\'t have sufficient credits.!');
+						wc_add_notice( __('You don\'t have sufficient credits.!', WC_WALLET_TEXT) );
 					}else{
 						set_credit_in_cart( 0 );
-						wc_add_notice( 'There is Error while adding credits.!', 'error' );
+						wc_add_notice( __('There is Error while adding credits.!', WC_WALLET_TEXT), 'error' );
 					}
 				}
 				
@@ -140,12 +140,12 @@ function woo_add_cart_fee( $carts ) {
 					if( $on_hold <= $amount  ){
 						if( get_wallet_restricted_amount() < $on_hold ){
 								set_credit_in_cart( get_wallet_restricted_amount() );
-								wc_add_notice( 'Credit is Restricted for the users to '.wc_price( get_wallet_restricted_amount() ).'.!', 'error' );
+								wc_add_notice( __('Credit is Restricted for the users to ', WC_WALLET_TEXT).wc_price( get_wallet_restricted_amount() ).'.!', 'error' );
 						}else{
 							if( $on_hold > $cart_total ){
 								if( $amount >= $cart_total ){
 									set_credit_in_cart( $cart_total );
-									wc_add_notice( 'Credits adjusted with total.!' );
+									wc_add_notice( __('Credits adjusted with total.!', WC_WALLET_TEXT) );
 								}else{
 									set_credit_in_cart( 0 );
 								}
@@ -156,7 +156,7 @@ function woo_add_cart_fee( $carts ) {
 					if( $on_hold > $cart_total ){
 						if( $amount >= $cart_total ){
 							set_credit_in_cart( $cart_total );
-							wc_add_notice( 'Credits adjusted with total.!' );
+							wc_add_notice( __('Credits adjusted with total.!', WC_WALLET_TEXT) );
 						}else{
 							set_credit_in_cart( 0 );
 						}
@@ -203,16 +203,16 @@ function wc_w_cart_hook(){
 		</style>
 		<div class = "Credits">
 			<input type = "number" class = "input-text credits_amount" id = "coupon_code" name = "wc_w_field" placeholder = "Use Credits" <?php if( is_wcw_is_float_value() ){ echo 'step="0.01"'; }?> value = "<?php echo $on_hold; ?>" min = "0" max = "<?php echo $amount; ?>">
-			<input type="submit" class="button" name="add_credits" value="Add / Update Credits">
+			<input type="submit" class="button" name="add_credits" value="<?php _e('Add / Update Credits', WC_WALLET_TEXT); ?>">
 			<?php if( is_show_remaining_credits() ){ ?>
-				<span class = "credits-text">Your Credits left is <b><?php echo wc_price( $amount ); ?></b> <?php if( $on_hold != "" ){ echo "- ".wc_price($on_hold)." = <b>".wc_price($amount-$on_hold)."<b>"; }?></span>
+				<span class = "credits-text"><?php _e('Your Credits left is ', WC_WALLET_TEXT); ?><b><?php echo wc_price( $amount ); ?></b> <?php if( $on_hold != "" ){ echo "- ".wc_price($on_hold)." = <b>".wc_price($amount-$on_hold)."<b>"; }?></span>
 			<?php }?>
 		</div>
 		
 	<?php 
 	}else{
 		echo '<div class = "Credits">';
-		echo '<span>If you have credits, please login to add.</span>';
+		echo '<span>'.__('If you have credits, please login to add.', WC_WALLET_TEXT ).'</span>';
 		echo '</div>';
 	}
 }
@@ -226,7 +226,7 @@ function set_credit_in_cart( $amount ){
 	if( update_user_meta( get_current_user_id(), 'onhold_credits', $amount ) ){
 		return true;
 	}else{
-		return true;
+		return false;
 	}
 }
 
@@ -348,8 +348,8 @@ function action_on_cancel_order( $array ){
  */
 function wc_w_get_type( $type ){
 	switch( $type ){
-		case 0: $txt = "Wallet to Credits"; break;
-		case 1: $txt = "Credits to Wallet"; break;
+		case 0: $txt = __("Wallet to Credits", WC_WALLET_TEXT); break;
+		case 1: $txt = __("Credits to Wallet", WC_WALLET_TEXT); break;
 		default: $txt = ""; break;
 	}
 	
@@ -384,7 +384,7 @@ function this_get_tax( $_this ){
 		if ( ! $_product->is_taxable() ) {
 	
 			// Discounted Price (price with any pre-tax discounts applied)
-			$discounted_price      = $_this->get_discounted_price( $values, $base_price, true );
+			$discounted_price      = 0;
 			$line_subtotal_tax     = 0;
 			$line_subtotal         = $line_price;
 			$line_tax              = 0;
@@ -438,7 +438,7 @@ function this_get_tax( $_this ){
 				$line_subtotal_tax = array_sum( $taxes );
 	
 				// Calc prices and tax (discounted)
-				$discounted_price = $_this->get_discounted_price( $values, $base_price, true );
+				$discounted_price = 0;
 				$discounted_taxes = WC_Tax::calc_tax( $discounted_price * $values['quantity'], $item_tax_rates, true );
 				$line_tax         = array_sum( $discounted_taxes );
 				$line_total       = ( $discounted_price * $values['quantity'] ) - $line_tax;
@@ -464,7 +464,7 @@ function this_get_tax( $_this ){
 			$line_subtotal_tax     = array_sum( $taxes );
 	
 			// Now calc product rates
-			$discounted_price      = $_this->get_discounted_price( $values, $base_price, true );
+			$discounted_price      = 0;
 			$discounted_taxes      = WC_Tax::calc_tax( $discounted_price * $values['quantity'], $item_tax_rates );
 			$discounted_tax_amount = array_sum( $discounted_taxes );
 			$line_tax              = $discounted_tax_amount;
@@ -492,6 +492,15 @@ function this_get_tax( $_this ){
 		);
 	}
 	return $array;
+}
+
+function wcw_get_new_user_discount_price() {
+	$amount = get_option( "wcw_new_user_credits" );
+	if ( $amount != "" ) {
+		return $amount;
+	} else {
+		return 0;
+	}
 }
 
 /* All IS functions starts */
@@ -693,7 +702,7 @@ function wcw_plugin_success_msg( $msg, $status = "success" ){
 		echo '<div id="setting-error-settings_updated" class="updated settings-error notice is-dismissible"> 
 			<p><strong>'.$msg.'</strong></p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>';
 	}else{
-		echo '<div class="error"><p>'.$msg.'</p></div>';
+		echo '<div class="error"><p>'.__($msg, WC_WALLET_TEXT).'</p></div>';
 	}
 }
 
@@ -725,6 +734,7 @@ function wcw_update_form( $post ){
 	}
 		
 	wcw_yes_or_no_update( $post, 'wcw_restrict_max' );
+	wcw_yes_or_no_update( $post, 'wcw_new_user_credits' );
 	wcw_yes_or_no_update( $post, 'wcw_notify_admin' );
 	wcw_yes_or_no_update( $post, 'wcw_remining_credits' );
 	wcw_yes_or_no_update( $post, 'wcw_cancel_req' );
@@ -895,9 +905,9 @@ add_shortcode('wc_wallet_show_balance', 'wc_wallet_show_balance');
 
 function wc_wallet_show_balance(){
 	if( is_user_logged_in() ){
-		echo "Available Credits: ".wc_price(get_user_meta( get_current_user_id(), "wc_wallet", true ));
+		_e( "Available Credits: ", WC_WALLET_TEXT ).wc_price(get_user_meta( get_current_user_id(), "wc_wallet", true ));
 	}else{
-		echo "You need to login to see your credits";
+		_e("You need to login to see your credits", WC_WALLET_TEXT);
 	}
 }
 
@@ -925,6 +935,18 @@ function wcw_check_the_order_status( $order_id, $old_status ){
 	}else{
 		return false;
 	}
+}
+
+
+add_action( 'user_register', 'wcw_new_user_credits', 10, 1 );
+
+/**
+ * 
+ * @param int $user_id
+ * @todo Add offer money for new users
+ */
+function wcw_new_user_credits( $user_id ) {
+	update_user_meta ( $user_id, 'wc_wallet', wcw_get_new_user_discount_price() );
 }
 
 }

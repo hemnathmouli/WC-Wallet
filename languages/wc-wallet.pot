@@ -1,0 +1,317 @@
+# Copyright (C) 2016 WC Wallet
+# This file is distributed under the same license as the WC Wallet package.
+msgid ""
+msgstr ""
+"Project-Id-Version: WC Wallet 1.0.5\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wc-wallet\n"
+"POT-Creation-Date: 2016-10-31 19:41:00+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2016-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: includes/functions.php:16
+msgid "WooCommerce Wallet"
+msgstr ""
+
+#. #-#-#-#-#  wc-wallet.pot (WC Wallet 1.0.5)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: includes/functions.php:19
+msgid "WC Wallet"
+msgstr ""
+
+#: includes/functions.php:23
+msgid "The money in the wallet of this user."
+msgstr ""
+
+#: includes/functions.php:78 includes/functions.php:100
+msgid "Credits added sucessfully.!"
+msgstr ""
+
+#: includes/functions.php:81 includes/functions.php:103
+#: includes/functions.php:134
+msgid "There is Error while adding credits.!"
+msgstr ""
+
+#: includes/functions.php:85 includes/functions.php:107
+#: includes/functions.php:148 includes/functions.php:159
+msgid "Credits adjusted with total.!"
+msgstr ""
+
+#: includes/functions.php:88 includes/functions.php:93
+#: includes/functions.php:110
+msgid "You dont't have sufficient credits in your account."
+msgstr ""
+
+#: includes/functions.php:131
+msgid "You don't have sufficient credits.!"
+msgstr ""
+
+#: includes/functions.php:143
+msgid "Credit is Restricted for the users to "
+msgstr ""
+
+#: includes/functions.php:206
+msgid "Add / Update Credits"
+msgstr ""
+
+#: includes/functions.php:208
+msgid "Your Credits left is "
+msgstr ""
+
+#: includes/functions.php:215
+msgid "If you have credits, please login to add."
+msgstr ""
+
+#: includes/functions.php:351
+msgid "Wallet to Credits"
+msgstr ""
+
+#: includes/functions.php:352
+msgid "Credits to Wallet"
+msgstr ""
+
+#: includes/functions.php:849 includes/functions.php:865
+msgctxt "WooCommerce Order status"
+msgid "On Cancel Request"
+msgstr ""
+
+#: includes/functions.php:854
+msgid "On Cancel Request <span class=\"count\">(%s)</span>"
+msgid_plural "On Cancel Request <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/functions.php:908
+msgid "Available Credits: "
+msgstr ""
+
+#: includes/functions.php:910
+msgid "You need to login to see your credits"
+msgstr ""
+
+#: includes/settings.php:41
+msgid "Gendral Settings"
+msgstr ""
+
+#: includes/settings.php:44
+msgid "Credits Applicable If The Order Are In These Method"
+msgstr ""
+
+#: includes/settings.php:59
+msgid "No Payment Methods found.!"
+msgstr ""
+
+#: includes/settings.php:62
+msgid ""
+"When order is cancelled, if the above checked method are there, the cancel "
+"request can be processed."
+msgstr ""
+
+#: includes/settings.php:68
+msgid "Credits Transfered When Order Status is in"
+msgstr ""
+
+#: includes/settings.php:96
+msgid ""
+"This option is used to filter transfer of credits only if the checked status "
+"are given."
+msgstr ""
+
+#: includes/settings.php:102
+msgid "Apply Credits For Tax and Shipping?"
+msgstr ""
+
+#: includes/settings.php:112
+msgid "Validate round value"
+msgstr ""
+
+#: includes/settings.php:117
+msgid ""
+"Enabling this option, can values can be give as 200.99 and disabling this, "
+"validated as 200 or 210 ( No decimal )."
+msgstr ""
+
+#: includes/settings.php:123
+msgid "Restrict Maximum credits"
+msgstr ""
+
+#: includes/settings.php:127
+msgid ""
+"This can restrict maximum credits usage for a person. Leave blank for no "
+"restrict."
+msgstr ""
+
+#: includes/settings.php:133
+msgid "Notify Admin"
+msgstr ""
+
+#: includes/settings.php:137
+msgid "Notify admin if any changes happen in user wallet."
+msgstr ""
+
+#: includes/settings.php:143
+msgid "Show Credits Remining In Cart"
+msgstr ""
+
+#: includes/settings.php:147
+msgid ""
+"Hide or Show the remaining credits available for a user in the cart page."
+msgstr ""
+
+#: includes/settings.php:153
+msgid "New user credits"
+msgstr ""
+
+#: includes/settings.php:157
+msgid "Offer credits for new users, just like coupon."
+msgstr ""
+
+#: includes/settings.php:163
+msgid "Send Cancel Request Option"
+msgstr ""
+
+#: includes/settings.php:167
+msgid "Enable \"Send Cancel Request\""
+msgstr ""
+
+#: includes/settings.php:171
+msgid ""
+"Enabling this will add a button called \"Send Cancel Request\" in my-account "
+"page."
+msgstr ""
+
+#: includes/settings.php:177
+msgid ""
+"Automatically Cancel Order On \"Send Cancel Request\" and Refund Credits"
+msgstr ""
+
+#: includes/settings.php:181
+msgid ""
+"If this option is not enabled, you need to customly click refund under "
+"Cancel Request Page."
+msgstr ""
+
+#: includes/settings.php:187
+msgid "Save Changes"
+msgstr ""
+
+#: wcw.php:69
+msgid "Settings"
+msgstr ""
+
+#: wcw.php:79 wcw.php:80
+msgctxt "Cancel Order"
+msgid "Cancel Order Request"
+msgstr ""
+
+#: wcw.php:81
+msgid "Cancel Order"
+msgstr ""
+
+#: wcw.php:82
+msgid "Parent Cancel Order"
+msgstr ""
+
+#: wcw.php:83
+msgid "All Cancel Order"
+msgstr ""
+
+#: wcw.php:84
+msgid "View Cancel Order"
+msgstr ""
+
+#: wcw.php:85
+msgid "Add New Cancel Order"
+msgstr ""
+
+#: wcw.php:86
+msgid "Add New"
+msgstr ""
+
+#: wcw.php:87
+msgid "Edit Cancel Order"
+msgstr ""
+
+#: wcw.php:88
+msgid "Update Cancel Order"
+msgstr ""
+
+#: wcw.php:89
+msgid "Search Cancel Order"
+msgstr ""
+
+#: wcw.php:90 wcw.php:129
+msgid "Not Found"
+msgstr ""
+
+#: wcw.php:91 wcw.php:130
+msgid "Not found in Trash"
+msgstr ""
+
+#: wcw.php:97 wcw.php:98
+msgid "Cancel Order Request"
+msgstr ""
+
+#: wcw.php:118 wcw.php:119
+msgctxt "WC log"
+msgid "WC log"
+msgstr ""
+
+#: wcw.php:120 wcw.php:136 wcw.php:137
+msgid "WC log"
+msgstr ""
+
+#: wcw.php:121
+msgid "Parent WC log"
+msgstr ""
+
+#: wcw.php:122
+msgid "All WC log"
+msgstr ""
+
+#: wcw.php:123
+msgid "View WC log"
+msgstr ""
+
+#: wcw.php:124 wcw.php:125
+msgid "Add New WC log"
+msgstr ""
+
+#: wcw.php:126
+msgid "Edit WC log"
+msgstr ""
+
+#: wcw.php:127
+msgid "Update WC log"
+msgstr ""
+
+#: wcw.php:128
+msgid "Search WC log"
+msgstr ""
+
+#: wcw.php:264
+msgid "Requires"
+msgstr ""
+
+#: wcw.php:264
+msgid "To Be Installed And Activated"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://hemnathmouli.github.io/WC-Wallet"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Activate this plugin to make the wallet system with WooCommerce.!"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Hemnath Mouli"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://hemzware.com"
+msgstr ""

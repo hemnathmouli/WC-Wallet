@@ -38,7 +38,7 @@ $wcw_is_float_value_yes		= get_option('wcw_is_float_value') == 1			? 'checked' :
 <div class = "wrap">
 <h1>WC Wallet Settings</h1>
 <form method="post">
-	<h3 class="title"><?php _e( 'Gendral Settings', WC_WALLET_TEXT ); ?></h3>
+	<h3 class="title"><?php _e( 'General Settings', WC_WALLET_TEXT ); ?></h3>
 	<table class="form-table">
 		<tr>
 			<th scope="row"><label for="wcw_payment_method"><?php _e( 'Credits Applicable If The Order Are In These Method', WC_WALLET_TEXT ); ?></label></th>

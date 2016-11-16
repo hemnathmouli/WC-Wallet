@@ -5,7 +5,7 @@
  * Author: Hemnath Mouli
  * Author URI: http://hemzware.com
  * Description: Activate this plugin to make the wallet system with WooCommerce.!
- * Version: 1.0.5
+ * Version: 1.0.6
  * Text Domain: wc-wallet
  */
 
@@ -13,13 +13,13 @@ if ( ! defined( 'WPINC' ) ) { die; }
 
 define( "WC_WALLET_TEXT", "wc-wallet" );
 
-class wc_w{
+class wc_w {
 	
 	/**
 	 * 
 	 * @var The current version of the plugin
 	 */
-	private $version 	= '1.0.5';
+	private $version 	= '1.0.6';
 	
 	/**
 	 * 
@@ -63,17 +63,17 @@ class wc_w{
 	 */
 	function wc_w_add_menus(){
 		$e = new wc_w();
-		add_menu_page('Wallet', 'WC Wallet', 'administrator', 'wallet', array( wc_w, 'wc_w_menu_content' ), 'dashicons-nametag', '56' );
-		add_submenu_page( 'wallet', 'Credits logs','Credits logs', 'administrator', 'wallet', array( wc_w, 'wc_w_menu_content' ) );
-		add_submenu_page( 'wallet', 'Cancel Requests', 'Cancel Requests '.$e->request_count(), 'administrator', 'wc-wallet-cancel-requests', array( wc_w, 'wc_w_menu_cancel_request' ) );
-		add_submenu_page( 'wallet', __('Settings', WC_WALLET_TEXT), __('Settings', WC_WALLET_TEXT), 'administrator', 'wc-wallet-settings', array( wc_w, 'wc_w_menu_settings' ) );
+		add_menu_page('Wallet', 'WC Wallet', 'administrator', 'wallet', array( $this, 'wc_w_menu_content' ), 'dashicons-nametag', '56' );
+		add_submenu_page( 'wallet', 'Credits logs','Credits logs', 'administrator', 'wallet', array( $this, 'wc_w_menu_content' ) );
+		add_submenu_page( 'wallet', 'Cancel Requests', 'Cancel Requests '.$e->request_count(), 'administrator', 'wc-wallet-cancel-requests', array( $this, 'wc_w_menu_cancel_request' ) );
+		add_submenu_page( 'wallet', __('Settings', WC_WALLET_TEXT), __('Settings', WC_WALLET_TEXT), 'administrator', 'wc-wallet-settings', array( $this, 'wc_w_menu_settings' ) );
 	}
 	
 	/**
 	 * 
 	 * @todo Create the post types
 	 */
-	function wc_w_add_post_type(){
+	function wc_w_add_post_type() {
 		
 			$labels = array(
 					'name'                => _x( 'Cancel Order Request', 'Cancel Order', WC_WALLET_TEXT ),
@@ -154,7 +154,7 @@ class wc_w{
 			register_post_type( WC_WALLET_TEXT, $args );
 		
 		
-			add_action( 'admin_menu', array(__CLASS__, 'wc_w_add_menus'), 5 );
+			add_action( 'admin_menu', array($this, 'wc_w_add_menus'), 5 );
 			register_activation_hook(__FILE__, array( $this, 'add_options') );
 			//add_action( 'woocommerce_order_status_cancelled', array($this, 'wc_m_move_order_money_to_user') );
 			add_action( 'woocommerce_order_status_changed', array( $this, 'wc_m_move_order_money_to_user'), 99, 3 );

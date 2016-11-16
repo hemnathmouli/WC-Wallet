@@ -791,16 +791,19 @@ if( is_cancel_request_enabled() ){
 	 * @return multitype:string Ambigous <string, mixed>
 	 */
 	function add_wc_cancel_my_account_orders_status( $actions, $order )    {
-	
-		if ($order->id) {
-			$the_order = wc_get_order($order->id);
-		}
-	
-	
-		if ( wcw_check_the_order_status( $order->id )  ) {
+		
+		$check	=	wcw_check_the_order_status( $order->id, $order->post_status );
+		
+		if ( $check == 1 ) {
 			$actions['cancelled'] = array(
 					'url' 		=> wp_nonce_url(admin_url('admin-ajax.php?action=request_for_cancell_wcw&order_id=' . $order->id), 'mark_order_as_cancell_request'), 
 					'name' 		=> 'Send Cancel Request', 
+					'action' 	=> "mark_order_as_cancell_request"
+			);
+		} else if ( $check == 2 ) {
+			$actions['cancelled'] = array(
+					'url' 		=> '#',
+					'name' 		=> 'Cancel request sent',
 					'action' 	=> "mark_order_as_cancell_request"
 			);
 		}
@@ -918,20 +921,34 @@ function wc_wallet_show_balance(){
  * @param string $old_status
  * 
  * @since 1.0.2
- * @property 1.0.4 accepts credits again which is used already
+ * @property 1.0.4 accepts credidts again which is used already
  * 
  */
-function wcw_check_the_order_status( $order_id, $old_status ){
+function wcw_check_the_order_status( $order_id, $old_status = '' ){
 	$order 		= 	new WC_Order( $order_id );
 	$order_type	=	get_post_meta( $order_id, '_payment_method', true );
-	$order_status	=	"wc-".$old_status;
+	$order_status	=	$old_status;
 	$array	=	json_decode( get_option('wcw_transfer_only'), true );
 	$order_total = get_post_meta($order_id, '_order_total', true);
 	$order_array = isset($array[$order_type])	?	$array[$order_type]	:	false;
-	if( $order_total == 0 ){
-		return true;
-	}else if( $order_array && array_search( $order_status,  $order_array ) !== false ){
-		return true;
+	
+	$args = array(
+			'meta_key' => 'oid',
+			'meta_value' => $order_id,
+			'post_type' => 'wcw_corequest',
+			'post_status' => 'publish',
+			'posts_per_page' => -1
+	);
+	$corequests = get_posts( $args );
+	
+	$is_already_refund_sent	=	count( $corequests )	==	0	?	true	:	false;
+	
+	if( ( $order_array && array_search( $order_status,  $order_array ) !== false ) || $order_total != "0.00" ){
+		if ( $is_already_refund_sent ) {
+			return 1;
+		} else {
+			return 2;
+		}
 	}else{
 		return false;
 	}

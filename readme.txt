@@ -62,6 +62,10 @@ If you ever don't want to refund your money instead use as credits for future pu
 * Offer credits for new users
 * Added .pot for translation
 
+= 1.0.6 =
+* Bug Fix
+* Spelling Correction of Gendral to General
+
 == Upgrade Notice ==
 
 = 1.0.0 =
@@ -81,3 +85,6 @@ Awesome. We have fixed the bugs and added new Features. Update to 1.0.4
 
 = 1.0.5 =
 New bug fix and added some more features
+
+= 1.0.6 =
+Awesome. We have fixed the bugs. Update to 1.0.6

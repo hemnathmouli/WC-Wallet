@@ -65,7 +65,7 @@ $wcw_is_float_value_yes		= get_option('wcw_is_float_value') == 1			? 'checked' :
 		
 		<tr>
 			<th scope="row">
-				<label for="wcw_transfer_only">><?php _e( 'Credits Transfered When Order Status is in', WC_WALLET_TEXT ); ?></label>
+				<label for="wcw_transfer_only"><?php _e( 'Credits Transfered When Order Status is in', WC_WALLET_TEXT ); ?></label>
 			</th>
 			<td>
 				<?php 

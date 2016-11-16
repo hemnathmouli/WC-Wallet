@@ -93,7 +93,7 @@ msgid "You need to login to see your credits"
 msgstr ""
 
 #: includes/settings.php:41
-msgid "Gendral Settings"
+msgid "General Settings"
 msgstr ""
 
 #: includes/settings.php:44

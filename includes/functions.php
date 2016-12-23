@@ -75,7 +75,7 @@ function woo_add_cart_fee( $carts ) {
 						if( $credit <= $in_wallet ){
 							if( $credit <= $cart_total ){
 								if( set_credit_in_cart( $credit ) ){
-									wc_add_notice( __('Credits added sucessfully.!', WC_WALLET_TEXT) );
+									wc_add_notice( __('Credits added successfully!', WC_WALLET_TEXT) );
 								}else{
 									set_credit_in_cart( 0 );
 									wc_add_notice( __('There is Error while adding credits.!', WC_WALLET_TEXT), 'error' );

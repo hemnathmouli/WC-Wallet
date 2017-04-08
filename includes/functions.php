@@ -70,7 +70,7 @@ function woo_add_cart_fee( $carts ) {
 					// Check the restriction amount with entered amount
 					if( get_wallet_restricted_amount() < $credit ){
 							set_credit_in_cart( get_wallet_restricted_amount() );
-							wc_add_notice( 'Credit is Restricted for the users to '.wc_price( get_wallet_restricted_amount() ).'.!', 'error' );
+							wc_add_notice( 'Credit is Restricted for the users to '.wc_price( get_wallet_restricted_amount() ).'!', 'error' );
 					}else{
 						if( $credit <= $in_wallet ){
 							if( $credit <= $cart_total ){
@@ -78,11 +78,11 @@ function woo_add_cart_fee( $carts ) {
 									wc_add_notice( __('Credits added successfully!', WC_WALLET_TEXT) );
 								}else{
 									set_credit_in_cart( 0 );
-									wc_add_notice( __('There is Error while adding credits.!', WC_WALLET_TEXT), 'error' );
+									wc_add_notice( __('There is Error while adding credits!', WC_WALLET_TEXT), 'error' );
 								}
 							}else if( $credit > $cart_total ){
 								if( set_credit_in_cart( $cart_total ) ){
-									wc_add_notice( __('Credits adjusted with total.!', WC_WALLET_TEXT) );
+									wc_add_notice( __('Credits adjusted with total!', WC_WALLET_TEXT) );
 								}else{
 									set_credit_in_cart( 0 );
 									wc_add_notice( __('You dont\'t have sufficient credits in your account.', WC_WALLET_TEXT ) , 'error' );
@@ -97,14 +97,14 @@ function woo_add_cart_fee( $carts ) {
 					if( $credit <= $in_wallet ){
 						if( $credit <= $cart_total ){
 							if( set_credit_in_cart( $credit ) ){
-								wc_add_notice( __('Credits added sucessfully.!', WC_WALLET_TEXT ) );
+								wc_add_notice( __('Credits added sucessfully!', WC_WALLET_TEXT ) );
 							}else{
 								set_credit_in_cart( 0 );
-								wc_add_notice( __('There is Error while adding credits.!', WC_WALLET_TEXT ), 'error' );
+								wc_add_notice( __('There is Error while adding credits!', WC_WALLET_TEXT ), 'error' );
 							}
 						}else if( $credit > $cart_total ){
 							if( set_credit_in_cart( $cart_total ) ){
-								wc_add_notice( __('Credits adjusted with total.!', WC_WALLET_TEXT ) );
+								wc_add_notice( __('Credits adjusted with total!', WC_WALLET_TEXT ) );
 							}else{
 								set_credit_in_cart( 0 );
 								wc_add_notice( __('You dont\'t have sufficient credits in your account.', WC_WALLET_TEXT ) , 'error' );
@@ -128,10 +128,10 @@ function woo_add_cart_fee( $carts ) {
 				
 				if( $on_hold > $amount  ){
 					if( set_credit_in_cart( $amount ) ){
-						wc_add_notice( __('You don\'t have sufficient credits.!', WC_WALLET_TEXT) );
+						wc_add_notice( __('You don\'t have sufficient credits!', WC_WALLET_TEXT) );
 					}else{
 						set_credit_in_cart( 0 );
-						wc_add_notice( __('There is Error while adding credits.!', WC_WALLET_TEXT), 'error' );
+						wc_add_notice( __('There is Error while adding credits!', WC_WALLET_TEXT), 'error' );
 					}
 				}
 				
@@ -140,12 +140,12 @@ function woo_add_cart_fee( $carts ) {
 					if( $on_hold <= $amount  ){
 						if( get_wallet_restricted_amount() < $on_hold ){
 								set_credit_in_cart( get_wallet_restricted_amount() );
-								wc_add_notice( __('Credit is Restricted for the users to ', WC_WALLET_TEXT).wc_price( get_wallet_restricted_amount() ).'.!', 'error' );
+								wc_add_notice( __('Credit is Restricted for the users to ', WC_WALLET_TEXT).wc_price( get_wallet_restricted_amount() ).'!', 'error' );
 						}else{
 							if( $on_hold > $cart_total ){
 								if( $amount >= $cart_total ){
 									set_credit_in_cart( $cart_total );
-									wc_add_notice( __('Credits adjusted with total.!', WC_WALLET_TEXT) );
+									wc_add_notice( __('Credits adjusted with total!', WC_WALLET_TEXT) );
 								}else{
 									set_credit_in_cart( 0 );
 								}
@@ -156,7 +156,7 @@ function woo_add_cart_fee( $carts ) {
 					if( $on_hold > $cart_total ){
 						if( $amount >= $cart_total ){
 							set_credit_in_cart( $cart_total );
-							wc_add_notice( __('Credits adjusted with total.!', WC_WALLET_TEXT) );
+							wc_add_notice( __('Credits adjusted with total!', WC_WALLET_TEXT) );
 						}else{
 							set_credit_in_cart( 0 );
 						}

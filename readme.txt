@@ -1,9 +1,10 @@
 === WC Wallet ===
 Contributors: hemnathmouli
+Donate link: https://www.paypal.me/hemmyy/
 Tags: wc wallet, wc credits, woocommerce wallet, cancelled order to wallet, woocommerce credits 
-Requires at least: 3.5
-Tested up to: 4.6.1
-Stable tag: 1.0.6
+Requires at least: 4.0
+Tested up to: 4.7.3
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,6 +28,8 @@ If you ever don't want to refund your money instead use as credits for future pu
 * Credits restrictions for users.
 * To show users their balance, use `[wc_wallet_show_balance]` shortcode.
 * Offer credits for new users.
+* Check the history of transfers and also balance in My Account
+* Dashboard Widget.
 
 == Installation ==
 1. Ensure you have latest version of WooCommerce plugin installed ( 2.2 or above )
@@ -66,25 +69,31 @@ If you ever don't want to refund your money instead use as credits for future pu
 * Bug Fix
 * Spelling Correction of Gendral to General
 
+= 1.0.7 =
+* Bug Fix
+* Removed period before exclamation sign
+* Dashboard widget
+* My Account Menu
+
+= 1.0.8 =
+* Bigboss Support
+* Cart and Checkout bug fix
+
+= 2.0.0 =
+* Able to delete credit logs
+* Show logs in user profile if changed by admin
+* Bug fixed my account wallet history
+* Show credits in Checkout
+* Able to clean all logs
+* Cancel resquest bug fix
+* Hide wallet form in Cart/Checkout option
+* Shortcode [wc_wallet_show_balance] bug fixed
+
+= 2.1.0 =
+* Lastest WordPress and Woocommerce compatibility
+* Fixed Bugs
+
 == Upgrade Notice ==
 
-= 1.0.0 =
-Good News. New Version is available, with extra feature.
-
-= 1.0.1 =
-Good News. New Version is available, with extra feature.
-
-= 1.0.2 =
-Awesome. We have fixed the bugs and added new Features. Update to 1.0.2
-
-= 1.0.3 =
-Awesome. We have fixed the bugs and added new Features. Update to 1.0.3
-
-= 1.0.4 =
-Awesome. We have fixed the bugs and added new Features. Update to 1.0.4
-
-= 1.0.5 =
-New bug fix and added some more features
-
-= 1.0.6 =
-Awesome. We have fixed the bugs. Update to 1.0.6
+= 2.1.0 =
+Major upgrade to 2.1.0 is available bug fixes and compatibility with latest Woocommerce version.

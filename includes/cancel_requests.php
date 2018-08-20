@@ -1,7 +1,7 @@
 <div class = "wrap">
 <?php 
 	if( !is_cancel_request_enabled() ){
-		wcw_plugin_success_msg('To have this feature, please enable cancel requests in settings under WC Wallet menu',"error");
+		wcw_plugin_success_msg(__( 'To have this feature, please enable cancel requests in settings under WC Wallet menu', WC_WALLET_TEXT ),"error");
 	}
 ?>
 
@@ -12,9 +12,9 @@ if( is_cancel_request_enabled() ){
 
 <form method  = "get">
 	<div class="alignleft actions">
-		<label for="filter-by-date" class="screen-reader-text">Filter by date</label>
+		<label for="filter-by-date" class="screen-reader-text"><?php _e( 'Filter by date', WC_WALLET_TEXT ); ?></label>
 		<select name="ID" id="filter-by-date">
-			<option value="0">All Users</option>
+			<option value="0"><?php _e( 'All Users', WC_WALLET_TEXT ); ?></option>
 			<?php 
 			$array = array();
 			foreach( wc_w_get_log() as $log ){ 
@@ -34,12 +34,12 @@ if( is_cancel_request_enabled() ){
 <table class = "wp-list-table widefat fixed striped posts">
 	<thead>
 		<tr>
-			<th scope = "col">Transaction ID</th>
-			<th scope = "col">User</th>
-			<th scope = "col">Order Number</th>
-			<th scope = "col">Amount</th>
-			<th scope = "col">Date</th>
-			<th scope = "col">Refund</th>
+			<th scope = "col"><?php _e( 'Transaction ID', WC_WALLET_TEXT ); ?></th>
+			<th scope = "col"><?php _e( 'User', WC_WALLET_TEXT ); ?></th>
+			<th scope = "col"><?php _e( 'Order Number', WC_WALLET_TEXT ); ?></th>
+			<th scope = "col"><?php _e( 'Amount', WC_WALLET_TEXT ); ?></th>
+			<th scope = "col"><?php _e( 'Date', WC_WALLET_TEXT ); ?></th>
+			<th scope = "col"><?php _e( 'Refund', WC_WALLET_TEXT ); ?></th>
 		</tr>
 	</thead>
 	<?php 
@@ -90,12 +90,12 @@ if( is_cancel_request_enabled() ){
 	?>
 	<tfoot>
 		<tr>
-			<th scope = "col">Transaction ID</th>
-			<th scope = "col">User</th>
-			<th scope = "col">Order Number</th>
-			<th scope = "col">Amount</th>
-			<th scope = "col">Date</th>
-			<th scope = "col">Refund</th>
+			<th scope = "col"><?php _e( 'Transaction ID', WC_WALLET_TEXT ); ?></th>
+			<th scope = "col"><?php _e( 'User', WC_WALLET_TEXT ); ?></th>
+			<th scope = "col"><?php _e( 'Order Number', WC_WALLET_TEXT ); ?></th>
+			<th scope = "col"><?php _e( 'Amount', WC_WALLET_TEXT ); ?></th>
+			<th scope = "col"><?php _e( 'Date', WC_WALLET_TEXT ); ?></th>
+			<th scope = "col"><?php _e( 'Refund', WC_WALLET_TEXT ); ?></th>
 		</tr>
 	</tfoot>
 </table>

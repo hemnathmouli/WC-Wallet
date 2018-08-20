@@ -1,22 +1,65 @@
-# Copyright (C) 2016 WC Wallet
+# Copyright (C) 2017 WC Wallet
 # This file is distributed under the same license as the WC Wallet package.
 msgid ""
 msgstr ""
-"Project-Id-Version: WC Wallet 1.0.5\n"
+"Project-Id-Version: WC Wallet 2.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wc-wallet\n"
-"POT-Creation-Date: 2016-10-31 19:41:00+00:00\n"
+"POT-Creation-Date: 2017-04-08 00:10:58+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2016-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: includes/cancel_requests.php:4
+msgid ""
+"To have this feature, please enable cancel requests in settings under WC "
+"Wallet menu"
+msgstr ""
+
+#: includes/cancel_requests.php:15
+msgid "Filter by date"
+msgstr ""
+
+#: includes/cancel_requests.php:17
+msgid "All Users"
+msgstr ""
+
+#: includes/cancel_requests.php:37 includes/cancel_requests.php:93
+#: log/backend.php:128 log/backend.php:196
+msgid "Transaction ID"
+msgstr ""
+
+#: includes/cancel_requests.php:38 includes/cancel_requests.php:94
+#: log/backend.php:129 log/backend.php:197
+msgid "User"
+msgstr ""
+
+#: includes/cancel_requests.php:39 includes/cancel_requests.php:95
+#: includes/functions.php:1117 log/backend.php:130 log/backend.php:198
+msgid "Order Number"
+msgstr ""
+
+#: includes/cancel_requests.php:40 includes/cancel_requests.php:96
+#: includes/functions.php:1120
+msgid "Amount"
+msgstr ""
+
+#: includes/cancel_requests.php:41 includes/cancel_requests.php:97
+#: includes/functions.php:1118 log/backend.php:133 log/backend.php:201
+msgid "Date"
+msgstr ""
+
+#: includes/cancel_requests.php:42 includes/cancel_requests.php:98
+msgid "Refund"
+msgstr ""
 
 #: includes/functions.php:16
 msgid "WooCommerce Wallet"
 msgstr ""
 
-#. #-#-#-#-#  wc-wallet.pot (WC Wallet 1.0.5)  #-#-#-#-#
+#. #-#-#-#-#  wc-wallet.pot (WC Wallet 2.0.0)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: includes/functions.php:19
 msgid "WC Wallet"
@@ -26,277 +69,362 @@ msgstr ""
 msgid "The money in the wallet of this user."
 msgstr ""
 
-#: includes/functions.php:78 includes/functions.php:100
-msgid "Credits added sucessfully.!"
+#: includes/functions.php:88 includes/functions.php:110
+msgid "Credits added successfully!"
 msgstr ""
 
-#: includes/functions.php:81 includes/functions.php:103
-#: includes/functions.php:134
-msgid "There is Error while adding credits.!"
+#: includes/functions.php:91 includes/functions.php:113
+#: includes/functions.php:144
+msgid "There is Error while adding credits!"
 msgstr ""
 
-#: includes/functions.php:85 includes/functions.php:107
-#: includes/functions.php:148 includes/functions.php:159
-msgid "Credits adjusted with total.!"
+#: includes/functions.php:95 includes/functions.php:117
+msgid "Credits adjusted with total!"
 msgstr ""
 
-#: includes/functions.php:88 includes/functions.php:93
-#: includes/functions.php:110
+#: includes/functions.php:98 includes/functions.php:103
+#: includes/functions.php:120
 msgid "You dont't have sufficient credits in your account."
 msgstr ""
 
-#: includes/functions.php:131
-msgid "You don't have sufficient credits.!"
+#: includes/functions.php:141
+msgid "You don't have sufficient credits!"
 msgstr ""
 
-#: includes/functions.php:143
+#: includes/functions.php:153
 msgid "Credit is Restricted for the users to "
 msgstr ""
 
-#: includes/functions.php:206
+#: includes/functions.php:158 includes/functions.php:169
+msgid "Credits adjusted with total"
+msgstr ""
+
+#: includes/functions.php:254
+msgid "Pay with credits"
+msgstr ""
+
+#: includes/functions.php:257
+msgid "Use Credits"
+msgstr ""
+
+#: includes/functions.php:258
 msgid "Add / Update Credits"
 msgstr ""
 
-#: includes/functions.php:208
+#: includes/functions.php:260
 msgid "Your Credits left is "
 msgstr ""
 
-#: includes/functions.php:215
+#: includes/functions.php:269
 msgid "If you have credits, please login to add."
 msgstr ""
 
-#: includes/functions.php:351
+#: includes/functions.php:405
 msgid "Wallet to Credits"
 msgstr ""
 
-#: includes/functions.php:352
+#: includes/functions.php:406
 msgid "Credits to Wallet"
 msgstr ""
 
-#: includes/functions.php:849 includes/functions.php:865
+#: includes/functions.php:407 includes/functions.php:408
+msgid "Changed By Admin"
+msgstr ""
+
+#: includes/functions.php:932 includes/functions.php:948
 msgctxt "WooCommerce Order status"
 msgid "On Cancel Request"
 msgstr ""
 
-#: includes/functions.php:854
+#: includes/functions.php:937
 msgid "On Cancel Request <span class=\"count\">(%s)</span>"
 msgid_plural "On Cancel Request <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/functions.php:908
-msgid "Available Credits: "
-msgstr ""
-
-#: includes/functions.php:910
+#: includes/functions.php:994
 msgid "You need to login to see your credits"
 msgstr ""
 
-#: includes/settings.php:41
+#: includes/functions.php:1094 includes/functions.php:1096
+msgid "Wallet"
+msgstr ""
+
+#: includes/functions.php:1111
+msgid "Hello"
+msgstr ""
+
+#: includes/functions.php:1112
+msgid "Your wallet balance is"
+msgstr ""
+
+#: includes/functions.php:1116
+msgid "Transaction Number"
+msgstr ""
+
+#: includes/functions.php:1119
+msgid "Usage"
+msgstr ""
+
+#: includes/functions.php:1143
+msgid "Credits/money used from wallet"
+msgstr ""
+
+#: includes/functions.php:1144
+msgid "Credits/money added to wallet"
+msgstr ""
+
+#: includes/functions.php:1145 includes/functions.php:1146
+msgid "Changed by admin"
+msgstr ""
+
+#: includes/functions.php:1175
+msgid "Wallet Balance"
+msgstr ""
+
+#: includes/settings.php:45
+msgid "WC Wallet Settings"
+msgstr ""
+
+#: includes/settings.php:47
 msgid "General Settings"
 msgstr ""
 
-#: includes/settings.php:44
+#: includes/settings.php:50
 msgid "Credits Applicable If The Order Are In These Method"
 msgstr ""
 
-#: includes/settings.php:59
+#: includes/settings.php:65
 msgid "No Payment Methods found.!"
 msgstr ""
 
-#: includes/settings.php:62
+#: includes/settings.php:68
 msgid ""
 "When order is cancelled, if the above checked method are there, the cancel "
 "request can be processed."
 msgstr ""
 
-#: includes/settings.php:68
+#: includes/settings.php:74
 msgid "Credits Transfered When Order Status is in"
 msgstr ""
 
-#: includes/settings.php:96
+#: includes/settings.php:104
 msgid ""
 "This option is used to filter transfer of credits only if the checked status "
 "are given."
 msgstr ""
 
-#: includes/settings.php:102
+#: includes/settings.php:110
 msgid "Apply Credits For Tax and Shipping?"
 msgstr ""
 
-#: includes/settings.php:112
+#: includes/settings.php:113 includes/settings.php:124
+#: includes/settings.php:134 includes/settings.php:209
+msgid "Yes"
+msgstr ""
+
+#: includes/settings.php:114 includes/settings.php:125
+#: includes/settings.php:135
+msgid "No"
+msgstr ""
+
+#: includes/settings.php:121
+msgid "Show wallet history and balance in My Account page?"
+msgstr ""
+
+#: includes/settings.php:131
 msgid "Validate round value"
 msgstr ""
 
-#: includes/settings.php:117
+#: includes/settings.php:136
 msgid ""
 "Enabling this option, can values can be give as 200.99 and disabling this, "
 "validated as 200 or 210 ( No decimal )."
 msgstr ""
 
-#: includes/settings.php:123
+#: includes/settings.php:142
 msgid "Restrict Maximum credits"
 msgstr ""
 
-#: includes/settings.php:127
+#: includes/settings.php:146
 msgid ""
 "This can restrict maximum credits usage for a person. Leave blank for no "
 "restrict."
 msgstr ""
 
-#: includes/settings.php:133
+#: includes/settings.php:152
 msgid "Notify Admin"
 msgstr ""
 
-#: includes/settings.php:137
+#: includes/settings.php:156
 msgid "Notify admin if any changes happen in user wallet."
 msgstr ""
 
-#: includes/settings.php:143
-msgid "Show Credits Remining In Cart"
+#: includes/settings.php:162
+msgid "Show Credits Remining In Cart & Checkout"
 msgstr ""
 
-#: includes/settings.php:147
+#: includes/settings.php:166
 msgid ""
 "Hide or Show the remaining credits available for a user in the cart page."
 msgstr ""
 
-#: includes/settings.php:153
+#: includes/settings.php:172 includes/settings.php:176
+msgid "Hide WC Wallet form in Cart"
+msgstr ""
+
+#: includes/settings.php:182 includes/settings.php:186
+msgid "Hide WC Wallet form in Checkout"
+msgstr ""
+
+#: includes/settings.php:192
 msgid "New user credits"
 msgstr ""
 
-#: includes/settings.php:157
+#: includes/settings.php:196
 msgid "Offer credits for new users, just like coupon."
 msgstr ""
 
-#: includes/settings.php:163
+#: includes/settings.php:202
 msgid "Send Cancel Request Option"
 msgstr ""
 
-#: includes/settings.php:167
+#: includes/settings.php:206
 msgid "Enable \"Send Cancel Request\""
 msgstr ""
 
-#: includes/settings.php:171
+#: includes/settings.php:210
 msgid ""
 "Enabling this will add a button called \"Send Cancel Request\" in my-account "
 "page."
 msgstr ""
 
-#: includes/settings.php:177
+#: includes/settings.php:216
 msgid ""
 "Automatically Cancel Order On \"Send Cancel Request\" and Refund Credits"
 msgstr ""
 
-#: includes/settings.php:181
+#: includes/settings.php:220
 msgid ""
 "If this option is not enabled, you need to customly click refund under "
 "Cancel Request Page."
 msgstr ""
 
-#: includes/settings.php:187
+#: includes/settings.php:226
 msgid "Save Changes"
 msgstr ""
 
-#: wcw.php:69
+#: log/backend.php:119
+msgid "Delete Selected"
+msgstr ""
+
+#: log/backend.php:131 log/backend.php:199
+msgid "Type"
+msgstr ""
+
+#: log/backend.php:132 log/backend.php:200
+msgid "Credits"
+msgstr ""
+
+#: wcw.php:72
 msgid "Settings"
 msgstr ""
 
-#: wcw.php:79 wcw.php:80
+#: wcw.php:82 wcw.php:83
 msgctxt "Cancel Order"
 msgid "Cancel Order Request"
 msgstr ""
 
-#: wcw.php:81
+#: wcw.php:84
 msgid "Cancel Order"
 msgstr ""
 
-#: wcw.php:82
+#: wcw.php:85
 msgid "Parent Cancel Order"
 msgstr ""
 
-#: wcw.php:83
+#: wcw.php:86
 msgid "All Cancel Order"
 msgstr ""
 
-#: wcw.php:84
+#: wcw.php:87
 msgid "View Cancel Order"
 msgstr ""
 
-#: wcw.php:85
+#: wcw.php:88
 msgid "Add New Cancel Order"
 msgstr ""
 
-#: wcw.php:86
+#: wcw.php:89
 msgid "Add New"
 msgstr ""
 
-#: wcw.php:87
+#: wcw.php:90
 msgid "Edit Cancel Order"
 msgstr ""
 
-#: wcw.php:88
+#: wcw.php:91
 msgid "Update Cancel Order"
 msgstr ""
 
-#: wcw.php:89
+#: wcw.php:92
 msgid "Search Cancel Order"
 msgstr ""
 
-#: wcw.php:90 wcw.php:129
+#: wcw.php:93 wcw.php:132
 msgid "Not Found"
 msgstr ""
 
-#: wcw.php:91 wcw.php:130
+#: wcw.php:94 wcw.php:133
 msgid "Not found in Trash"
 msgstr ""
 
-#: wcw.php:97 wcw.php:98
+#: wcw.php:100 wcw.php:101
 msgid "Cancel Order Request"
 msgstr ""
 
-#: wcw.php:118 wcw.php:119
+#: wcw.php:121 wcw.php:122
 msgctxt "WC log"
 msgid "WC log"
 msgstr ""
 
-#: wcw.php:120 wcw.php:136 wcw.php:137
+#: wcw.php:123 wcw.php:139 wcw.php:140
 msgid "WC log"
 msgstr ""
 
-#: wcw.php:121
+#: wcw.php:124
 msgid "Parent WC log"
 msgstr ""
 
-#: wcw.php:122
+#: wcw.php:125
 msgid "All WC log"
 msgstr ""
 
-#: wcw.php:123
+#: wcw.php:126
 msgid "View WC log"
 msgstr ""
 
-#: wcw.php:124 wcw.php:125
+#: wcw.php:127 wcw.php:128
 msgid "Add New WC log"
 msgstr ""
 
-#: wcw.php:126
+#: wcw.php:129
 msgid "Edit WC log"
 msgstr ""
 
-#: wcw.php:127
+#: wcw.php:130
 msgid "Update WC log"
 msgstr ""
 
-#: wcw.php:128
+#: wcw.php:131
 msgid "Search WC log"
 msgstr ""
 
-#: wcw.php:264
+#: wcw.php:292
 msgid "Requires"
 msgstr ""
 
-#: wcw.php:264
+#: wcw.php:292
 msgid "To Be Installed And Activated"
 msgstr ""
 

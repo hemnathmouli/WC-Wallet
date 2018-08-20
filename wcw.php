@@ -5,7 +5,7 @@
  * Author: Hemnath Mouli
  * Author URI: http://hemzware.com
  * Description: Activate this plugin to make the wallet system with WooCommerce.!
- * Version: 1.0.6
+ * Version: 2.0.0
  * Text Domain: wc-wallet
  */
 
@@ -19,7 +19,7 @@ class wc_w {
 	 * 
 	 * @var The current version of the plugin
 	 */
-	private $version 	= '1.0.6';
+	private $version 	= '2.0.0';
 	
 	/**
 	 * 
@@ -55,6 +55,9 @@ class wc_w {
 		add_option('wcw_cancel_req', 1);
 		add_option('wcw_automatic_cancel_req');
 		add_option('wcw_is_float_value', 0);
+		add_option('wcw_show_in_myaccount', 1);
+		add_option('wcw_show_in_cart', 0);
+		add_option('wcw_show_in_checkout', 1);
 	}
 	
 	/**
@@ -105,7 +108,7 @@ class wc_w {
 					'show_ui'             => true,
 					'show_in_menu'        => false,
 					'show_in_nav_menus'   => true,
-					'show_in_admin_bar'   => true,
+					'show_in_admin_bar'   => false,
 					'can_export'          => true,
 					'has_archive'         => true,
 					'exclude_from_search' => false,
@@ -144,7 +147,7 @@ class wc_w {
 					'show_ui'             => true,
 					'show_in_menu'        => false,
 					'show_in_nav_menus'   => true,
-					'show_in_admin_bar'   => true,
+					'show_in_admin_bar'   => false,
 					'can_export'          => true,
 					'has_archive'         => true,
 					'exclude_from_search' => false,
@@ -156,8 +159,10 @@ class wc_w {
 		
 			add_action( 'admin_menu', array($this, 'wc_w_add_menus'), 5 );
 			register_activation_hook(__FILE__, array( $this, 'add_options') );
+			add_action( 'init', array( $this, 'wc_wallet_setup' ) );
 			//add_action( 'woocommerce_order_status_cancelled', array($this, 'wc_m_move_order_money_to_user') );
 			add_action( 'woocommerce_order_status_changed', array( $this, 'wc_m_move_order_money_to_user'), 99, 3 );
+			add_filter( 'plugin_row_meta', array( $this, 'wcw_plugin_row_meta' ), 10, 2 );
 				
 	}
 	
@@ -245,6 +250,29 @@ class wc_w {
 		if( $count != 0 ){
 			return '<span class="update-plugins count-'.$count.'"><span class="plugin-count">'.$count.'</span></span>';
 		}
+	}
+	
+	function wc_wallet_setup () {
+		/*
+		 * Make plugin available for translation.
+		 * Translations can be filed in the /languages/ directory.
+		 */
+		load_plugin_textdomain( 'wc-wallet', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+	}
+		
+	function wcw_plugin_row_meta( $links, $file ) {
+		
+		if ( strpos( $file, 'wcw.php' ) !== false ) {
+			$new_links = array(
+					'donate' 	=> '<b><a href="https://www.paypal.me/hemmyy/" target="_blank">Donate</a></b>',
+					'support'	=> '<a href="https://wordpress.org/support/plugin/wc-wallet" target="_blank">Support</a>',
+					'hire_me' 	=> '<a href="http://hemzware.com/hire-me" target="_blank">Hire me</a>'
+			);
+			
+			$links = array_merge( $links, $new_links );
+		}
+		
+		return $links;
 	}
 	
 	

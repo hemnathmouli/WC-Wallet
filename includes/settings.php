@@ -71,7 +71,7 @@ $wcw_show_in_myaccount_no	= get_option('wcw_show_in_myaccount') == 0		? 'checked
 		
 		<tr>
 			<th scope="row">
-				<label for="wcw_transfer_only"><?php _e( 'Allow Credits Transfered When Order Status is in', WC_WALLET_TEXT ); ?></label>
+				<label for="wcw_transfer_only"><?php _e( 'Allow Credits Transferred When Order Status is in', WC_WALLET_TEXT ); ?></label>
 			</th>
 			<td>
 				<?php 

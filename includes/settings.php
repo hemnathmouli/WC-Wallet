@@ -27,6 +27,7 @@ $wcw_is_float_value_no		= get_option('wcw_is_float_value') == 0			? 'checked' : 
 $wcw_is_float_value_yes		= get_option('wcw_is_float_value') == 1			? 'checked' : '';
 $wcw_show_in_myaccount_yes	= get_option('wcw_show_in_myaccount') == 1		? 'checked'	: '';
 $wcw_show_in_myaccount_no	= get_option('wcw_show_in_myaccount') == 0		? 'checked'	: '';
+$wcw_remove_cancel_logs		= get_option('wcw_remove_cancel_logs') == 1		? 'checked'	: '';
 
 ?>
 <style>
@@ -71,7 +72,7 @@ $wcw_show_in_myaccount_no	= get_option('wcw_show_in_myaccount') == 0		? 'checked
 		
 		<tr>
 			<th scope="row">
-				<label for="wcw_transfer_only"><?php _e( 'Credits Transferred When Order Status is in', WC_WALLET_TEXT ); ?></label>
+				<label for="wcw_transfer_only"><?php _e( 'Allow Credits Transferred When Order Status is in', WC_WALLET_TEXT ); ?></label>
 			</th>
 			<td>
 				<?php 
@@ -94,6 +95,18 @@ $wcw_show_in_myaccount_no	= get_option('wcw_show_in_myaccount') == 0		? 'checked
 									<?php 
 								}
 								echo "</td></tr>";
+							} else {
+							    echo "<tr>";
+							    echo "<td style ='padding-left: 0px; vertical-align: top;'>" . $method->title . ":</td><td>";
+							    foreach( $sts as $keys => $status ){
+							        ?>
+									<label class = "w200" for="dashboard_right_now-hide_<?php echo $keys;?>_<?php echo $key;?>">
+										<input class="hide-postbox-tog" name="wcw_transfer_only[<?php echo $key; ?>][]" type="checkbox" id="dashboard_right_now-hide_<?php echo $keys;?>_<?php echo $key;?>" value="<?php echo $keys; ?>">
+										<?php echo $status; ?>						
+									</label>
+									<?php 
+								}
+								echo "</td></tr>";
 							}
 						}
 						echo "</table>";
@@ -101,7 +114,9 @@ $wcw_show_in_myaccount_no	= get_option('wcw_show_in_myaccount') == 0		? 'checked
 						echo "No Payment Methods found.!";
 					}
 				?>
-				<p class="description" id="tagline-description"><?php _e( 'This option is used to filter transfer of credits only if the checked status are given.', WC_WALLET_TEXT );  ?></p>
+				<p class="description" id="tagline-description"><?php _e( 'This option is used to filter transfer of credits only if the checked status are given.', WC_WALLET_TEXT );  ?>
+					<br> <u><?php _e('Important:', WC_WALLET_TEXT); ?></u> <?php _e('Choose this based on the well known knowledge in order status in each methods', WC_WALLET_TEXT); ?> - <a href = 'http://hemzware.com/how-to-set-up-wc-wallet-order-status/' title='Read More' target='_blank'>Read More</a>
+				</p>
 			</td>
 		</tr>
 		
@@ -184,6 +199,16 @@ $wcw_show_in_myaccount_no	= get_option('wcw_show_in_myaccount') == 0		? 'checked
 			<td>
 				<input type = "checkbox" id = "wcw_show_in_cart" name = "wcw_show_in_checkout" <?php echo $wcw_show_in_checkout; ?> value = "1"> Yes 
 				<p class="description" id="tagline-description"><?php _e( 'Hide WC Wallet form in Checkout', WC_WALLET_TEXT ); ?></p>
+			</td>
+		</tr>
+
+		<tr>
+			<th scope="row">
+				<label for="wcw_remove_cancel_logs"><?php _e('Remove "Cancel Request" logs if the order is removed', WC_WALLET_TEXT); ?></label>
+			</th>
+			<td>
+				<input type = "checkbox" id = "wcw_remove_cancel_logs" name = "wcw_remove_cancel_logs" <?php echo $wcw_remove_cancel_logs; ?> value = "1"> Yes 
+				<p class="description" id="tagline-description"><?php _e( 'Enable this option to delete the Cancel Request logs automatically when the order is delete.', WC_WALLET_TEXT ); ?></p>
 			</td>
 		</tr>
 		

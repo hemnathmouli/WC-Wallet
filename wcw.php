@@ -5,7 +5,7 @@
  * Author: Hemnath Mouli
  * Author URI: http://hemzware.com
  * Description: Activate this plugin to make the wallet system with WooCommerce.!
- * Version: 2.0.0
+ * Version: 2.2.0-beta
  * Text Domain: wc-wallet
  */
 
@@ -19,7 +19,7 @@ class wc_w {
 	 * 
 	 * @var The current version of the plugin
 	 */
-	private $version 	= '2.0.0';
+	private $version 	= '2.1.0';
 	
 	/**
 	 * 
@@ -58,6 +58,7 @@ class wc_w {
 		add_option('wcw_show_in_myaccount', 1);
 		add_option('wcw_show_in_cart', 0);
 		add_option('wcw_show_in_checkout', 1);
+		add_option('wcw_remove_cancel_logs', 1);
 	}
 	
 	/**
@@ -163,7 +164,7 @@ class wc_w {
 			//add_action( 'woocommerce_order_status_cancelled', array($this, 'wc_m_move_order_money_to_user') );
 			add_action( 'woocommerce_order_status_changed', array( $this, 'wc_m_move_order_money_to_user'), 99, 3 );
 			add_filter( 'plugin_row_meta', array( $this, 'wcw_plugin_row_meta' ), 10, 2 );
-				
+			add_action( 'trashed_post', array($this, 'wcw_remove_cancel_request'), 10, 1);
 	}
 	
 	/**
@@ -234,6 +235,36 @@ class wc_w {
 					$author_wallet = get_user_meta( $order_autho, 'wc_wallet', true );
 					update_user_meta( $order_autho, 'wc_wallet', $author_wallet + $order_total );
 					wc_w_add_to_log( $order_autho, $order_total, 1, $order_id );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Removes cancel request when related order is deleted (only if the option is enabled)
+	 */
+	function wcw_remove_cancel_request( $post_id = '' ) {
+		global $post_type;
+
+		if ( $post_type == 'shop_order' ) {
+			if ( $post_id != '' && is_wcw_remove_cancel_logs() ) {
+				$args = array(
+					'posts_per_page'	=>	-1,
+					'post_type'        	=> 	'wcw_corequest',
+					'meta_query' => array(
+						array(
+							'key' => 'oid',
+							'value' => $post_id,
+							'compare' => '=',
+						)
+					)
+				);
+				$posts = get_posts($args);
+
+				if ( count( $posts ) ) {
+					foreach ( $posts as $order_request ) {
+						wp_delete_post( $order_request->ID );
+					}
 				}
 			}
 		}

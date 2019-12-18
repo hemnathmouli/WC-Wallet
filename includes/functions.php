@@ -255,7 +255,7 @@ function wc_w_cart_hook(){
 		<?php endif; ?>
 		<div class = "Credits">
 			<input type = "number" class = "input-text credits_amount" id = "coupon_code" name = "wc_w_field" placeholder = "<?php _e('Use Credits', WC_WALLET_TEXT); ?>" <?php if( is_wcw_is_float_value() ){ echo 'step="0.01"'; }?> value = "<?php echo $on_hold; ?>" min = "0" max = "<?php echo $amount; ?>">
-			<input type="submit" class="button" name="add_credits" value="<?php _e('Add / Update '.ucwords( $credits['plural'] ), WC_WALLET_TEXT); ?>">
+			<input type="submit" class="button" name="add_credits" value="<?php _e('Add / Update credits' ), WC_WALLET_TEXT); ?>">
 			<?php if( is_show_remaining_credits() ){ ?>
 				<span class = "credits-text"><?php _e('Your Credits left is ', WC_WALLET_TEXT); ?><b><?php echo wc_price( $amount ); ?></b> <?php if( $on_hold != "" ){ echo "- ".wc_price($on_hold)." = <b>".wc_price($amount-$on_hold)."<b>"; }?></span>
 			<?php }?>

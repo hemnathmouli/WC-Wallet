@@ -2,17 +2,17 @@
 
 if ( ! defined( 'WPINC' ) ) { die; }
 if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-	
-	
-add_action( 'show_user_profile', 'wc_w_wallet_money' );
-add_action( 'edit_user_profile', 'wc_w_wallet_money' );
-
-/**
- * 
- * @param int $user
- */
-function wc_w_wallet_money( $user ) {
-	?>
+    
+    
+    add_action( 'show_user_profile', 'wc_w_wallet_money' );
+    add_action( 'edit_user_profile', 'wc_w_wallet_money' );
+    
+    /**
+     *
+     * @param int $user
+     */
+    function wc_w_wallet_money( $user ) {
+        ?>
   <h3><?php _e("WooCommerce Wallet", WC_WALLET_TEXT); ?></h3>
   <table class="form-table"> 
     <tr>
@@ -255,7 +255,7 @@ function wc_w_cart_hook(){
 		<?php endif; ?>
 		<div class = "Credits">
 			<input type = "number" class = "input-text credits_amount" id = "coupon_code" name = "wc_w_field" placeholder = "<?php _e('Use Credits', WC_WALLET_TEXT); ?>" <?php if( is_wcw_is_float_value() ){ echo 'step="0.01"'; }?> value = "<?php echo $on_hold; ?>" min = "0" max = "<?php echo $amount; ?>">
-			<input type="submit" class="button" name="add_credits" value="<?php _e('Add / Update Credits', WC_WALLET_TEXT); ?>">
+			<input type="submit" class="button" name="add_credits" value="<?php _e('Add / Update '.ucwords( $credits['plural'] ), WC_WALLET_TEXT); ?>">
 			<?php if( is_show_remaining_credits() ){ ?>
 				<span class = "credits-text"><?php _e('Your Credits left is ', WC_WALLET_TEXT); ?><b><?php echo wc_price( $amount ); ?></b> <?php if( $on_hold != "" ){ echo "- ".wc_price($on_hold)." = <b>".wc_price($amount-$on_hold)."<b>"; }?></span>
 			<?php }?>
@@ -664,6 +664,16 @@ function is_wcw_show_in_myaccount() {
 	}
 }
 
+function is_wcw_remove_cancel_logs() {
+	$e = get_option( 'wcw_remove_cancel_logs' );
+	if( $e == 1 ){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+
 /* All IS functions ends */
 
 /* Get functions */
@@ -819,6 +829,7 @@ function wcw_update_form( $post ){
 	wcw_yes_or_no_update( $post, 'wcw_show_in_myaccount' );
 	wcw_yes_or_no_update( $post, 'wcw_show_in_cart' );
 	wcw_yes_or_no_update( $post, 'wcw_show_in_checkout' );
+	wcw_yes_or_no_update( $post, 'wcw_remove_cancel_logs' );
 	
 	return true;
 }
@@ -862,6 +873,7 @@ function get_count_cancel_request(){
 }
 	
 if( is_cancel_request_enabled() ){
+    
 	add_filter('woocommerce_my_account_my_orders_actions', 'add_wc_cancel_my_account_orders_status', 100, 2);
 	/**
 	 * 
@@ -870,9 +882,9 @@ if( is_cancel_request_enabled() ){
 	 * @return multitype:string Ambigous <string, mixed>
 	 */
 	function add_wc_cancel_my_account_orders_status( $actions, $order )    {
-		$order =  json_decode( $order );
+		$order =  json_decode( $order ); 
 		$check	=	wcw_check_the_order_status( $order->id, "wc-".$order->status );
-		
+	
 		if ( $check == 1 ) {
 			$actions['cancelled'] = array(
 					'url' 		=> wp_nonce_url(admin_url('admin-ajax.php?action=request_for_cancell_wcw&order_id=' . $order->id), 'mark_order_as_cancell_request'), 
@@ -967,6 +979,7 @@ if( is_cancel_request_enabled() ){
 			}
 		}
 		wp_safe_redirect(wp_get_referer() ? wp_get_referer() : admin_url("admin.php?page=wc-wallet-cancel-requests"));
+		exit;
 	}
 }
 
@@ -981,7 +994,7 @@ if( is_cancel_request_enabled() ){
  */
 function wcw_ntify_admin( $email, $uname, $time, $oid, $amount, $type ){
 	$message = "Dear Admin, $uname has moved $type of amount $amount for the order #$oid at the time $time";
-	wp_mail( $eamil, "Changes in credits", $message );
+	wp_mail( $email, "Changes in credits", $message );
 }
 
 add_shortcode('wc_wallet_show_balance', 'wc_wallet_show_balance');
@@ -1090,10 +1103,13 @@ if ( is_wcw_show_in_myaccount() ) {
 		function wcw_add_wallet_in_myaccount ( $items ) {
 			$logout = $items['customer-logout'];
 			unset( $items['customer-logout'] );
+
+			// Allows users to change the tab name
+			$default_lable	=	apply_filters( 'wcw_wallet_myaccount_name', 'Wallets' );
 			
-			$label	=	__( 'Wallet', WC_WALLET_TEXT );
+			$label	=	__( $default_lable, WC_WALLET_TEXT );
 			
-			$items["wallet"]	=	__( 'Wallet', WC_WALLET_TEXT );
+			$items["wallet"]	=	$label;
 			
 			$items	=	apply_filters( "wcw_wallet_myaccount_tab", $items );
 			

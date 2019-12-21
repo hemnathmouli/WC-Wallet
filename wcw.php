@@ -5,7 +5,7 @@
  * Author: Hemnath Mouli
  * Author URI: http://hemzware.com
  * Description: Activate this plugin to make the wallet system with WooCommerce.!
- * Version: 2.2.0-beta
+ * Version: 2.2.0
  * Text Domain: wc-wallet
  */
 
@@ -19,7 +19,7 @@ class wc_w {
 	 * 
 	 * @var The current version of the plugin
 	 */
-	private $version 	= '2.1.0';
+	private $version 	= '2.2.0';
 	
 	/**
 	 * 

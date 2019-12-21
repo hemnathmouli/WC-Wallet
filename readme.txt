@@ -99,6 +99,6 @@ If you ever don't want to refund your money instead of use as credits for future
 = 2.1.0 =
 Major upgrade to 2.1.0 is available bug fixes and compatibility with latest Woocommerce version.
 
-= 2.2.0-beta =
+= 2.2.0 =
 * Added filter to change "Wallet" name in my-account tab
 * Added option enable/disable to delete Cancel Request when the order is deleted

@@ -3,7 +3,7 @@ Contributors: hemnathmouli
 Donate link: https://www.paypal.me/hemmyy/
 Tags: wc wallet, wc credits, woocommerce wallet, cancelled order to wallet, woocommerce credits 
 Requires at least: 4.0
-Tested up to: 5.2.1
+Tested up to: 5.3
 Stable tag: 2.1.0
 Requires PHP: 5.2.4
 License: GPLv2 or later
@@ -94,11 +94,11 @@ If you ever don't want to refund your money instead of use as credits for future
 * Lastest WordPress and Woocommerce compatibility
 * Fixed Bugs
 
-== Upgrade Notice ==
-
-= 2.1.0 =
-Major upgrade to 2.1.0 is available bug fixes and compatibility with latest Woocommerce version.
-
 = 2.2.0 =
 * Added filter to change "Wallet" name in my-account tab
 * Added option enable/disable to delete Cancel Request when the order is deleted
+
+== Upgrade Notice ==
+
+= 2.1.0 =
+Major upgrade to 2.2.0 is available bug fixes and compatibility with latest Woocommerce version.

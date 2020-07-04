@@ -222,51 +222,57 @@ if ( is_wcw_show_in_checkout() ) {
  * @todo Add credits input to cart 
  */
 function wc_w_cart_hook(){
-	if( is_user_logged_in() ){
+	if ( !is_wcw_force_use_credits() ) {
+		if( is_user_logged_in() ){
 
-		$on_hold = get_user_meta( get_current_user_id(), 'onhold_credits',true ) != 0 ? get_user_meta( get_current_user_id(), 'onhold_credits',true ) : "";
-		$amount = get_user_meta( get_current_user_id(), 'wc_wallet', true );
-		$is_checkout	=	is_checkout();
-		
-		?>
-		<?php if( $is_checkout ){ ?>
-			<form method = "POST">
-		<?php } ?>
-		<style>
-			.Credits{
-				width: 100%;
-    			text-align: left;
-    			margin-top: 10px;
-    			<?php if ( $is_checkout) { ?>
-    			margin-bottom: 20px;
-    			<?php } ?>
-			}
-			.credits-text{
-				float: right;
-			}
-			<?php if ( $is_checkout ) { ?>
-				.credits_amount {
-					width: 200px;
+			$on_hold = get_user_meta( get_current_user_id(), 'onhold_credits',true ) != 0 ? get_user_meta( get_current_user_id(), 'onhold_credits',true ) : "";
+			$amount = get_user_meta( get_current_user_id(), 'wc_wallet', true );
+			$is_checkout	=	is_checkout();
+			
+			?>
+			<?php if( $is_checkout ){ ?>
+				<form method = "POST">
+			<?php } ?>
+			<style>
+				.Credits{
+					width: 100%;
+					text-align: left;
+					margin-top: 10px;
+					<?php if ( $is_checkout) { ?>
+					margin-bottom: 20px;
+					<?php } ?>
 				}
-			<?php }	?>
-		</style>
-		<?php if ( $is_checkout ):  ?>
-			<h3 id="order_review_heading"><?php _e( 'Pay with credits', 'woocommerce' ); ?></h3>
-		<?php endif; ?>
-		<div class = "Credits">
-			<input type = "number" class = "input-text credits_amount" id = "coupon_code" name = "wc_w_field" placeholder = "<?php _e('Use Credits', WC_WALLET_TEXT); ?>" <?php if( is_wcw_is_float_value() ){ echo 'step="0.01"'; }?> value = "<?php echo $on_hold; ?>" min = "0" max = "<?php echo $amount; ?>">
-			<input type="submit" class="button" name="add_credits" value="<?php _e('Add / Update credits', WC_WALLET_TEXT); ?>">
-			<?php if( is_show_remaining_credits() ){ ?>
-				<span class = "credits-text"><?php _e('Your Credits left is ', WC_WALLET_TEXT); ?><b><?php echo wc_price( $amount ); ?></b> <?php if( $on_hold != "" ){ echo "- ".wc_price($on_hold)." = <b>".wc_price($amount-$on_hold)."<b>"; }?></span>
-			<?php }?>
-		</div>
-		<?php if( $is_checkout ){ ?>
-			</form>
-		<?php } ?>
-	<?php 
-	}else{
-		echo '<div class = "Credits">';
-		echo '<span>'.__('If you have credits, please login to add.', WC_WALLET_TEXT ).'</span>';
+				.credits-text{
+					float: right;
+				}
+				<?php if ( $is_checkout ) { ?>
+					.credits_amount {
+						width: 200px;
+					}
+				<?php }	?>
+			</style>
+			<?php if ( $is_checkout ):  ?>
+				<h3 id="order_review_heading"><?php _e( 'Pay with credits', 'woocommerce' ); ?></h3>
+			<?php endif; ?>
+			<div class = "Credits">
+				<input type = "number" class = "input-text credits_amount" id = "coupon_code" name = "wc_w_field" placeholder = "<?php _e('Use Credits', WC_WALLET_TEXT); ?>" <?php if( is_wcw_is_float_value() ){ echo 'step="0.01"'; }?> value = "<?php echo $on_hold; ?>" min = "0" max = "<?php echo $amount; ?>">
+				<input type="submit" class="button" name="add_credits" value="<?php _e('Add / Update credits', WC_WALLET_TEXT); ?>">
+				<?php if( is_show_remaining_credits() ){ ?>
+					<span class = "credits-text"><?php _e('Your Credits left is ', WC_WALLET_TEXT); ?><b><?php echo wc_price( $amount ); ?></b> <?php if( $on_hold != "" ){ echo "- ".wc_price($on_hold)." = <b>".wc_price($amount-$on_hold)."<b>"; }?></span>
+				<?php }?>
+			</div>
+			<?php if( $is_checkout ){ ?>
+				</form>
+			<?php } ?>
+		<?php 
+		}else{
+			echo '<div class = "Credits">';
+			echo '<span>'.__('If you have credits, please login to add.', WC_WALLET_TEXT ).'</span>';
+			echo '</div>';
+		}
+	} else {
+		echo '<div class = "Credits" style="text-align: left; padding: 5px;">';
+		echo '<span>'.__('All your credits will be automatically added.', WC_WALLET_TEXT ).'</span>';
 		echo '</div>';
 	}
 }
@@ -673,6 +679,15 @@ function is_wcw_remove_cancel_logs() {
 	}
 }
 
+function is_wcw_force_use_credits() {
+	$e = get_option( 'wcw_force_use_credits' );
+	if( $e == 1 ){
+		return true;
+	}else{
+		return false;
+	}
+}
+
 
 /* All IS functions ends */
 
@@ -830,6 +845,7 @@ function wcw_update_form( $post ){
 	wcw_yes_or_no_update( $post, 'wcw_show_in_cart' );
 	wcw_yes_or_no_update( $post, 'wcw_show_in_checkout' );
 	wcw_yes_or_no_update( $post, 'wcw_remove_cancel_logs' );
+	wcw_yes_or_no_update( $post, 'wcw_force_use_credits' );
 	
 	return true;
 }
@@ -1065,6 +1081,29 @@ add_action( 'user_register', 'wcw_new_user_credits', 10, 1 );
  */
 function wcw_new_user_credits( $user_id ) {
 	update_user_meta ( $user_id, 'wc_wallet', wcw_get_new_user_discount_price() );
+}
+
+
+add_action( 'woocommerce_cart_calculate_fees', 'wcw_force_use_credits' );
+
+/**
+ * @from 2.3.0
+ *
+ */
+
+function wcw_force_use_credits() {
+	if ( is_user_logged_in() && is_wcw_force_use_credits() ) {
+		if ( !WC()->cart->is_empty() ) {
+			$amout_in_wallet	=	get_user_meta( get_current_user_id(), 'wc_wallet', true );
+			if ( $amout_in_wallet == 0 ) return;
+
+			if ( WC()->cart->cart_contents_total < $amout_in_wallet ) {
+				set_credit_in_cart( WC()->cart->cart_contents_total );
+			} else if ( WC()->cart->cart_contents_total >= $amout_in_wallet  ) {
+				set_credit_in_cart( $amout_in_wallet );
+			}
+		}
+	}
 }
 
 /* ========= My Account page =========== */

@@ -22,7 +22,8 @@ If you ever don't want to refund your money instead of use as credits for future
 * The credits will be subtracted from the wallet for every purchase, as per credits used.
 
 = Features =
-* User Interfaced to add credits on cart page.
+* User interface to add credits on cart page.
+* Offer new user with credits as rewards to order.
 * No need for refunds in the gateways.
 * Automatic update total when credit is larger the cart total or when product is deleted.
 * Send Cancel Order Request and let the admin refund the amount as Credits.
@@ -98,7 +99,10 @@ If you ever don't want to refund your money instead of use as credits for future
 * Added filter to change "Wallet" name in my-account tab
 * Added option enable/disable to delete Cancel Request when the order is deleted
 
+= 2.3.0 =
+* Store owners can now force the user to use all the credits, based on their order total
+
 == Upgrade Notice ==
 
-= 2.1.0 =
-Major upgrade to 2.2.0 is available bug fixes and compatibility with latest Woocommerce version.
+= 2.2.0 =
+Major upgrade to 2.3.0 is available bug fixes and compatibility with latest Woocommerce version.

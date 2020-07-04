@@ -28,6 +28,7 @@ $wcw_is_float_value_yes		= get_option('wcw_is_float_value') == 1			? 'checked' :
 $wcw_show_in_myaccount_yes	= get_option('wcw_show_in_myaccount') == 1		? 'checked'	: '';
 $wcw_show_in_myaccount_no	= get_option('wcw_show_in_myaccount') == 0		? 'checked'	: '';
 $wcw_remove_cancel_logs		= get_option('wcw_remove_cancel_logs') == 1		? 'checked'	: '';
+$wcw_force_use_credits		= get_option('wcw_force_use_credits') == 1		? 'checked'	: '';
 
 ?>
 <style>
@@ -219,6 +220,19 @@ $wcw_remove_cancel_logs		= get_option('wcw_remove_cancel_logs') == 1		? 'checked
 			<td>
 				<input name="wcw_new_user_credits" type="number" id="wcw_new_user_credits" value = "<?php echo $wcw_new_user_credits; ?>" class="regular-text">
 				<p class="description" id="tagline-description"><?php _e( 'Offer credits for new users, just like coupon.', WC_WALLET_TEXT );  ?></p>
+			</td>
+		</tr>
+
+		<tr>
+			<th scope="row">
+				<label for="wcw_force_use_credits"><?php _e('Force add all the credits available to the user', WC_WALLET_TEXT); ?></label>
+			</th>
+			<td>
+				<input type = "checkbox" id = "wcw_force_use_credits" name = "wcw_force_use_credits" <?php echo $wcw_force_use_credits; ?> value = "1"> Yes 
+				<p class="description" id="tagline-description">
+					<?php _e( 'When this option is enabled, the equivaled credits for cart value will be automatically detected.', WC_WALLET_TEXT ); ?>
+					<br><b><i><?php _e( 'WARNING: this will disable the input from the customer. So your customers cannot change the credits.', WC_WALLET_TEXT ); ?></i></b>
+				</p>
 			</td>
 		</tr>
 		
